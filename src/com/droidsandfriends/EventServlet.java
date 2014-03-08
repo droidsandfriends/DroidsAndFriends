@@ -1,0 +1,246 @@
+package com.droidsandfriends;
+
+import com.stripe.Stripe;
+import com.stripe.exception.*;
+import com.stripe.model.Card;
+import com.stripe.model.Charge;
+import com.stripe.model.Customer;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+@SuppressWarnings("serial")
+public class EventServlet extends HttpServlet {
+
+  private static final Logger LOG = Logger.getLogger(EventServlet.class.getName());
+
+  @SuppressWarnings("deprecation")
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String id = request.getParameter("id");
+    if (id == null || id.length() == 0) {
+      response.sendRedirect("events");
+      return;
+    }
+    
+    String encodedContinueUrl = java.net.URLEncoder.encode("/event?id=" + id);
+
+    // If the driver doesn't have a profile, force them to create one first
+    Driver driver = Driver.findById((String) request.getAttribute("userId"));
+    if (driver == null) {
+      response.sendRedirect("driver?continueUrl=" + encodedContinueUrl);
+      return;
+    } else {
+      request.setAttribute("driver", driver);
+    }
+    
+    // If the driver has a profile, but the membership status is still NEW, force them to pay up first
+    if (MembershipStatus.NEW.equals(driver.getMembershipStatus())) {
+      response.sendRedirect("membership?continueUrl=" + encodedContinueUrl);
+      return;
+    }
+
+    try {
+      Event event = Event.findById(id);
+      if (event == null) {
+        // Someone is messing with the URL
+        response.sendRedirect("events");
+        return;
+      }
+
+      List<Registration> registrations = Registration.findAllByEventId(id);
+      String userId = (String) request.getAttribute("userId");
+      boolean alreadyRegistered = false;
+      for (Registration registration : registrations) {
+        if (userId.equals(registration.getUserId())) {
+          alreadyRegistered = true;
+          break;
+        }
+      }
+
+      request.setAttribute("alreadyRegistered", alreadyRegistered);
+      request.setAttribute("event", event);
+      request.setAttribute("registrations", registrations);
+      request.setAttribute("apiKey", PaymentConfiguration.getInstance().getPublishableKey());
+      request.getRequestDispatcher("event.jsp").forward(request, response);
+      return;
+    } catch (Exception e) {
+      request.setAttribute("error", "Exception: " + e);
+      request.getRequestDispatcher("events").forward(request, response);
+      return;
+    }
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
+      Stripe.apiKey = PaymentConfiguration.getInstance().getSecretKey();
+      Stripe.apiVersion = PaymentConfiguration.getInstance().getApiVersion();
+      
+      String userId = (String) request.getAttribute("userId");     // We use the Google user ID
+      String username = (String) request.getAttribute("username"); // We use the Google email address
+
+      // Process arguments
+      String eventId = request.getParameter("id");
+      Experience runGroup = Experience.valueOf(request.getParameter("runGroup"));
+      int guestCount =  Integer.parseInt(request.getParameter("guestCount"));
+
+      // If the driver doesn't have a profile, force them to create one first
+      Driver driver = Driver.findById(userId);
+      if (driver == null) {
+        response.sendRedirect("driver");
+        return;
+      }
+
+      // Pure coach registrations are free, so don't create a charge.
+      boolean mustPay = !(Experience.X.equals(runGroup) && guestCount == 0);
+      Charge charge = null;
+      if (mustPay) {
+        Event event = Event.findById(eventId);
+        long driverPrice = event.getDriverPrice();
+        long guestPrice = event.getGuestPrice();
+        long orderAmount = driverPrice + (guestCount * guestPrice); // In dollars, not cents
+        String orderDescription;
+        switch (guestCount) {
+          case 0:
+            orderDescription = String.format("%s: %s - $%d",
+                event.getDateDescription(), runGroup.getLabel(), driverPrice);
+            break;
+          case 1:
+            orderDescription = String.format("%s: %s - $%d, 1 Guest - $%d",
+                event.getDateDescription(), runGroup.getLabel(), driverPrice, guestPrice);
+            break;
+          default:
+            orderDescription = String.format("%s: %s - $%d, %d Guests - $%d",
+                event.getDateDescription(), runGroup.getLabel(), driverPrice, guestCount, (guestCount * guestPrice));
+            break;
+        }
+
+        Map<String, String> metadata = new HashMap<String, String>();
+        metadata.put("id", userId);
+        metadata.put("email", username);
+        metadata.put("type", "EVENT_REGISTRATION");
+
+        Customer customer;
+        String customerId = driver.getCustomerId();
+        String stripeToken = request.getParameter("stripeToken");
+        if (customerId == null) {
+          // Create new customer and add new card.
+          Map<String, Object> customerParams = new HashMap<String, Object>();
+          customerParams.put("card", stripeToken);
+          customerParams.put("description", userId);
+          customerParams.put("email", username);
+          customer = Customer.create(customerParams);
+          customerId = customer.getId();
+          driver.setCustomerId(customerId);
+          driver.save();
+        } else {
+          // Retrieve existing customer.
+          customer = Customer.retrieve(customerId);
+          // Delete all existing cards; we only ever remember the last one.
+          for (Card card : customer.getCards().getData()) {
+            card.delete();
+          }
+          // Add new card.
+          customer.createCard(stripeToken);
+        }
+
+        Map<String, Object> chargeParams = new HashMap<String, Object>();
+        chargeParams.put("amount", 100 * orderAmount); // Stripe expects cents, not dollars, so (100 * orderAmount)
+        chargeParams.put("currency", "USD");
+        chargeParams.put("capture", false); // Capture only after all datastore transactions have successfully committed
+        chargeParams.put("customer", customerId);
+        chargeParams.put("description", orderDescription);
+        chargeParams.put("metadata", metadata);
+   
+        // Authorize charge, but don't capture yet
+        charge = Charge.create(chargeParams);
+      }
+      
+      // Do the following transactions in sequence:
+      //    1. Decrement the availability count for the given event / run group (update inventory in the DB)
+      //    2. Create and save a transaction entry in the DB
+      //    3. Create and save a registration in the DB that links the user, the event/run group, and the transaction
+      // Each of these steps may be retried up to 3 times before aborting. If any one step fails, we refund the payment
+      // and notify the user that they have to rery. If they all succeed, we proceed to:
+      //    4. Capture payment
+      // ... and that is the life of a dollar! :)
+
+      // 1. Decrement the availability count for the given event
+      if (Event.updateRunGroup(eventId, runGroup)) {
+        // 2. Record the charge in the datastore (unless coach registration)
+        Transaction transaction = null;
+        if (mustPay) {
+          transaction = Transaction.createNew(charge.getId(), userId, charge.getAmount(), charge.getDescription());
+        }
+        if (!mustPay || transaction.save()) {
+          // 3. Record the registration in the datastore
+          Registration registration =
+              Registration.createNew(userId, eventId, runGroup, guestCount, (mustPay ? transaction.getId() : ""));
+          if (registration.save()) {
+            // 4. Capture payment
+            if (mustPay) {
+              charge.capture();
+              LOG.info("EventServlet::doPut payment captured!");
+            }
+          } else {
+            LOG.severe("EventServlet::doPut failed to record registration, not charging card");
+            charge.refund();
+            request.setAttribute("error", "Sorry, an error occurred during event registration. Your credit card has "
+                + "not been charged. Please try again.");
+          }
+        } else {
+          LOG.severe("EventServlet::doPut failed to record transaction, not charging card");
+          charge.refund();
+          request.setAttribute("error", "Sorry, an error occurred during event registration. Your credit card has "
+              + "not been charged. Please try again.");
+        }
+      } else {
+        LOG.severe("EventServlet::doPut failed to update run group inventory, not charging card");
+        charge.refund();
+        request.setAttribute("error", "Sorry, the run group you selected may be full, or an error occurred. Your "
+            + "credit card has not been charged. Please try again.");
+      }
+    } catch (CardException e) {
+      // Since it's a decline, CardException will be caught
+      String msg = String.format("CardException (code: %s, param: %s): %s", e.getCode(), e.getParam(), e);
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    } catch (InvalidRequestException e) {
+      // Invalid parameters were supplied to Stripe's API
+      String msg = String.format("InvalidRequestException (param: %s): %s", e.getParam(), e);
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    } catch (AuthenticationException e) {
+      // Authentication with Stripe's API failed (maybe you changed API keys recently)
+      String msg = String.format("AuthenticationException: %s", e);
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    } catch (APIConnectionException e) {
+      // Network communication with Stripe failed
+      String msg = String.format("APIConnectionException: %s", e);
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    } catch (StripeException e) {
+      // Display a very generic error to the user, and maybe send yourself an email
+      String msg = String.format("StripeException: %s", e);
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    } catch (Exception e) {
+      String msg = String.format("Exception: %s", e);
+      // Something else happened, completely unrelated to Stripe
+      request.setAttribute("error", msg);
+      LOG.severe(msg);
+    }
+
+    doGet(request, response);
+  }
+}

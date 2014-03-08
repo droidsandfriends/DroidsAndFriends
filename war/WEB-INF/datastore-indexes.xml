@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="false">
+
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="eventId" direction="asc"/>
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="createDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="membershipStatus" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="membershipStatus" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="car" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="car" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="referrer" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="referrer" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="experience" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="experience" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="gasCard" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="gasCard" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="email" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="email" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="phone" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="phone" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="emergencyName" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="emergencyName" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="emergencyPhone" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="emergencyPhone" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="updateDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Driver" ancestor="true" source="auto">
+        <property name="updateDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="date" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="venue" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="venue" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="a" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="a" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="b" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="b" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="c" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="c" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="x" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="x" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="driverPrice" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="driverPrice" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="guestPrice" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="guestPrice" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="createDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="updateDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="true" source="auto">
+        <property name="updateDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="createDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="id" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="id" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="car" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="car" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="date" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="runGroup" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="runGroup" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="guestCount" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="guestCount" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="transactionId" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="transactionId" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="updateDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Registration" ancestor="true" source="auto">
+        <property name="updateDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="createDate" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="id" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="id" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="name" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="name" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="email" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="email" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="amount" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="amount" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="description" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="description" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="createDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="updateDate" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Transaction" ancestor="true" source="auto">
+        <property name="updateDate" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

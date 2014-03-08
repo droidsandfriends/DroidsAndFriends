@@ -1,0 +1,400 @@
+html, body {
+  -webkit-font-smoothing: antialiased;
+  background-color: #333;
+  border: 0;
+  color: #fff;
+  font: 12pt "Roboto Slab", Arial, Helvetica, sans-serif;
+  margin: 0 0 2em;
+  padding: 0;
+}
+
+.dnf-ie .dnf-ie-warning {
+  display: block;
+}
+
+.dnf-not-ie .dnf-ie-warning {
+  display: none;
+}
+
+h1, h2, h3 {
+  color: #fff;
+  margin: auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32pt;
+  }
+
+h2 {
+  font-size: 24pt;
+}
+
+h3 {
+  font-size: 16pt;
+}
+
+a, a:link, a:visited {
+  color: #fd9240;
+  text-decoration: none;
+  }
+
+a:hover, a:active {
+  color: #fff;
+  text-decoration: none;
+}
+
+.dnf-header {
+  background-color: #333;
+  background-image: linear-gradient(#000,#333);
+  border: 0;
+  padding: 1em;
+  width: 100%;
+}
+
+.dnf-page-title {
+  color: #fd9240;
+  font-size: 16pt;
+  text-align: left;
+}
+
+.dnf-user-info {
+  text-align: right;
+}
+
+.dnf-message,
+.dnf-welcome-message {
+  margin: 1em auto;
+  padding: 1em 2em;
+  width: 40em;
+}
+
+fieldset {
+  background-color: #000;
+  border: 2px solid #fd9240;
+  border-radius: 1em; 
+  margin: 1em auto;
+  padding: 1em 2em;
+  width: 36em;
+}
+
+fieldset table {
+  margin: auto;
+  width: 100%;
+}
+
+legend {
+  color: #fff; /* stupid IE... */
+  font-size: 16pt;
+  margin: 0 1em;
+}
+
+.dnf-required {
+  font-size: 10pt;
+  font-style: italic;
+  color: #c66;
+}
+
+.dnf-label {
+  padding: 0 1em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dnf-field input, .dnf-field select , .dnf-field textarea {
+  -webkit-font-smoothing: antialiased;
+  font: 12pt "Roboto Slab", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: .25em;
+}
+
+.dnf-field textarea {
+  overflow: auto;
+  resize: none;
+}
+
+.dnf-hint {
+  font-size: 10pt;
+  color: #aaa;
+  padding: 0 0 1em;
+}
+
+.dnf-hidden {
+  display: none;
+}
+
+.dnf-checkbox {
+  font: 12pt "Roboto Slab", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: .25em;
+}
+
+.dnf-button-bar {
+  text-align: center;
+  margin: .5em auto;
+  width: 100%;
+}
+
+.dnf-button-bar button {
+  -webkit-font-smoothing: antialiased;
+  background-color: #fd9240;
+  background-image: linear-gradient(#fd9240,#7e4920);
+  border: 0;
+  border-radius: .5em;
+  color: #fff;
+  cursor: pointer;
+  font: 16pt Roboto, Arial, Helvetica, sans-serif;
+  margin: 0 .5em;
+  padding: .25em 1em;
+  text-align: center;
+}
+
+.dnf-cancel-button {
+  background-color: #6ac !important;
+  background-image: linear-gradient(#66aacc,#335566) !important;
+}
+
+.dnf-delete-button {
+  background-color: #c66 !important;
+  background-image: linear-gradient(#cc6666,#663333) !important;
+}
+
+.dnf-disabled {
+  opacity: .50 !important;
+  filter: alpha(opacity=50) !important;
+}
+
+table.dnf-admin {
+  border-spacing: 1px;
+  font: 10pt Roboto, Arial, Helvetica, sans-serif;
+  margin: 1em auto;
+}
+
+.dnf-admin td {
+  background-color: #666;
+  cursor: pointer;
+  padding: .25em .5em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dnf-admin th,
+td.dnf-admin-footer {
+  background-color: #000;
+  cursor: pointer;
+  padding: .25em .5em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+td.dnf-admin-footer {
+  border-radius: 0 0 1em 1em;
+  text-align: right !important;
+}
+
+.dnf-admin .dnf-group-A {
+  background-color: #6c6;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dnf-admin .dnf-group-B {
+  background-color: #cc6;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dnf-admin .dnf-group-C {
+  background-color: #c66;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dnf-admin .dnf-group-X {
+  background-color: #6ac;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dnf-admin .dnf-group-full {
+  background-color: #444;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dnf-group-logo {
+  height: 32px;
+  line-height: 0;
+  margin: 0 .5em;
+  vertical-align: middle;
+  width: 32px;
+}
+
+.dnf-event {
+  border: 0;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dnf-roster {
+  border: 0;
+  margin: auto;
+  padding: 0;
+}
+
+.dnf-event table {
+  border: 0;
+  border-collapse: collapse;
+  margin: 2em 4em;
+  padding: 0;
+  width: 18em;
+}
+
+.dnf-roster table {
+  border: 0;
+  border-collapse: collapse;
+  margin: 2em auto;
+  padding: 0;
+  width: 40em;
+}
+
+
+.dnf-event th {
+  background-color: #000;
+  border: 0;
+  border-radius: 1em 1em 0 0;
+  margin: 0;
+  padding: .5em 1em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dnf-roster th {
+  background-color: #000;
+  border: 0;
+  border-radius: 1em 1em 0 0;
+  font-weight: normal;
+  margin: 0;
+  padding: .25em .5em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dnf-event .dnf-event-date,
+.dnf-roster .dnf-event-date {
+  font-size: 20pt;
+}
+
+.dnf-event td {
+  background-color: #666;
+  border: 0;
+  margin: 0;
+  padding: .5em 1em;
+  text-align: left !important;
+  white-space: nowrap;
+}
+
+.dnf-roster td {
+  background-color: #666;
+  border: 1px solid #333;
+  border-collapse: collapse;
+  margin: 0;
+  padding: .25em .5em;
+  white-space: nowrap;
+}
+
+td.dnf-event-footer {
+  background-color: #000;
+  border: 1px solid #333;
+  border-radius: 0 0 1em 1em;
+  margin: 0;
+  padding: .5em 1em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+td.dnf-roster-footer {
+  background-color: #000;
+  border: 1px solid #333;
+  border-radius: 0 0 1em 1em;
+  margin: 0;
+  padding: .25em .5em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dnf-event img,
+.dnf-roster img {
+  border: 0;
+  float: left;
+  height: 48px;
+  line-height: 0;
+  margin-right: .5em;
+  padding: 0;
+  width: 48px;
+}
+
+.dnf-roster-guests {
+  color: #ccc;
+  font-style: italic;
+}
+
+.dnf-group-label {
+  font-size: 16pt;
+}
+
+.dnf-group-A .dnf-group-label {
+  color: #6c6;
+}
+
+.dnf-group-B .dnf-group-label {
+  color: #cc6;
+}
+
+.dnf-group-C .dnf-group-label {
+  color: #c66;
+}
+
+.dnf-group-X .dnf-group-label {
+  color: #6ac;
+}
+
+.dnf-group-full {
+  background-color: #444 !important;
+}
+
+.dnf-group-full .dnf-group-label {
+  color: #666 !important;
+}
+
+.dnf-group-info {
+  color: #ccc;
+  font-size: 12pt;
+  font-style: italic;
+}
+
+.dnf-group-full .dnf-group-info {
+  color: #999 !important;
+}
+
+.dnf-number {
+  text-align: right !important;
+}
+
+.dnf-error {
+  background-color: #eee;
+  border: 2px solid #c66;
+  border-radius: 1em;
+  color: #c66;
+  font: 10pt normal Monaco, Courier, fixed;
+  margin: 2em;
+  padding: 1em;
+}
+
+.dnf-current {
+  color: #fff !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+}

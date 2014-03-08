@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  version="2.5">
+
+  <!-- User-facing Servlets -->
+  <servlet>
+    <servlet-name>Events</servlet-name>
+    <servlet-class>com.droidsandfriends.EventsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Events</servlet-name>
+    <url-pattern>/events</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Driver</servlet-name>
+    <servlet-class>com.droidsandfriends.DriverServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Driver</servlet-name>
+    <url-pattern>/driver</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Membership</servlet-name>
+    <servlet-class>com.droidsandfriends.MembershipServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Membership</servlet-name>
+    <url-pattern>/membership</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Event</servlet-name>
+    <servlet-class>com.droidsandfriends.EventServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Event</servlet-name>
+    <url-pattern>/event</url-pattern>
+    <url-pattern>/order</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Admin-only Servlets -->
+  <servlet>
+    <servlet-name>ManageDrivers</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageDriversServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageDrivers</servlet-name>
+    <url-pattern>/admin/managedrivers</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageDriver</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageDriverServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageDriver</servlet-name>
+    <url-pattern>/admin/managedriver</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageEvents</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageEventsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageEvents</servlet-name>
+    <url-pattern>/admin/manageevents</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageEvent</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageEventServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageEvent</servlet-name>
+    <url-pattern>/admin/manageevent</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageTransactions</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageTransactionsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageTransactions</servlet-name>
+    <url-pattern>/admin/managetransactions</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ManageRegistrations</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageRegistrationsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageRegistrations</servlet-name>
+    <url-pattern>/admin/manageregistrations</url-pattern>
+  </servlet-mapping>
+
+  <!-- Filters-->
+  <filter>
+    <filter-name>UserFilter</filter-name>
+    <filter-class>com.droidsandfriends.UserFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>UserFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Everything needs Google login, everything is served over SSL -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>everything</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>*</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+
+  <!-- Only admins can access the admin area -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>admin</web-resource-name>
+      <url-pattern>/admin/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>
