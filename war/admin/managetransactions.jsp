@@ -16,7 +16,6 @@
       <thead>
         <tr>
           <th></th>
-          <dnf:th property="ID"/>
           <dnf:th property="NAME"/>
           <dnf:th property="EMAIL"/>
           <dnf:th property="AMOUNT"/>
@@ -30,17 +29,16 @@
         <c:forEach items="${transactions}" var="transaction">
           <tr>
             <td><input class="dnf-checkbox" name="delete" type="checkbox" value="${transaction.id}"></td>
-            <td>${transaction.id}</td>
             <td><a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a></td>
             <td>${fn:escapeXml(transaction.email)}</td>
-            <td class="dnf-number"><fmt:formatNumber value="${transaction.dollarAmount}" type="currency"/></td>
+            <td class="dnf-number"><a href="managetransaction?id=${transaction.id}"><fmt:formatNumber value="${transaction.dollarAmount}" type="currency"/></a></td>
             <td>${fn:escapeXml(transaction.description)}</td>
             <td title="${transaction.createDate}"><fmt:formatDate value="${transaction.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${transaction.updateDate}"><fmt:formatDate value="${transaction.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="8">${fn:length(transactions)} transactions</td>
+          <td class="dnf-admin-footer" colspan="7">${fn:length(transactions)} transactions</td>
         </tr>
       </tbody>
     </table>

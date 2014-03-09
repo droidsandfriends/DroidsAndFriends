@@ -89,6 +89,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ManageTransaction</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageTransactionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageTransaction</servlet-name>
+    <url-pattern>/admin/managetransaction</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>ManageRegistrations</servlet-name>
     <servlet-class>com.droidsandfriends.ManageRegistrationsServlet</servlet-class>
   </servlet>
