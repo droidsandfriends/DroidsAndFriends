@@ -1,23 +1,13 @@
 package com.droidsandfriends;
 
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.DatastoreTimeoutException;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.TransactionOptions;
 
 public class Registration {
 
@@ -152,44 +142,55 @@ public class Registration {
   }
   
   public static List<Registration> findAll() {
-    return findAll(Property.CREATE_DATE, true);
+    return findAll(Property.CREATE_DATE, /* isAscending */ true, /* eventId */ null, /* group */ null);
+  }
+
+  public static List<Registration> findAllByEventId(String eventId) {
+    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null);
   }
 
   public static List<Registration> findAll(Property orderBy, boolean isAscending) {
-    DatastoreService db = DatastoreServiceFactory.getDatastoreService();
-    Key parentKey = KeyFactory.createKey("Registrations", "default");
-    Query query = new Query("Registration", parentKey).addSort(orderBy.getName(), isAscending 
-        ? Query.SortDirection.ASCENDING
-        : Query.SortDirection.DESCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
-    List<Registration> registrations = new ArrayList<Registration>(entities.size());
-    for (Entity entity : entities) {
-      Registration registration = new Registration(entity);
-      registrations.add(registration);
-    }
-    return registrations;
+    return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null);
   }
-  
-  // Returns all registrations for this event, oldest first
-  public static List<Registration> findAllByEventId(String eventId) {
+
+  public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, String group) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Registrations", "default");
-    Query query = new Query("Registration", parentKey)
-        .setFilter(new FilterPredicate(Property.EVENT_ID.getName(), FilterOperator.EQUAL, eventId))
-        .addSort(Property.CREATE_DATE.getName(), Query.SortDirection.ASCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(100));
-    List<Registration> registrations = new ArrayList<Registration>(entities.size());
+
+    Query query = new Query("Registration", parentKey);
+    Query.Filter filter = constructFilter(eventId, group);
+    if (filter != null) {
+      query.setFilter(filter);
+    }
+    query.addSort(orderBy.getName(), isAscending ? Query.SortDirection.ASCENDING : Query.SortDirection.DESCENDING);
+
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
+    List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
       registrations.add(registration);
     }
+
     return registrations;
   }
 
+  private static Query.Filter constructFilter(String eventId, String group) {
+    Query.Filter eventFilter = (eventId == null || eventId.length() == 0)
+        ? null
+        : new Query.FilterPredicate(Property.EVENT_ID.getName(), FilterOperator.EQUAL, eventId);
+    Query.Filter groupFilter = (group == null || group.length() == 0)
+        ? null
+        : new Query.FilterPredicate(Property.RUN_GROUP.getName(), FilterOperator.EQUAL, group);
+    if (eventFilter != null && groupFilter != null) {
+      return Query.CompositeFilterOperator.and(eventFilter, groupFilter);
+    }
+    return (eventFilter != null) ? eventFilter : groupFilter;
+  }
+  
   public static void deleteByIds(String[] ids) {
     if (ids == null || ids.length == 0)
       return;
-    List<Key> keys = new ArrayList<Key>(ids.length);
+    List<Key> keys = new ArrayList<>(ids.length);
     for (String id : ids) {
       keys.add(getKeyFromId(id));
     }

@@ -1,11 +1,10 @@
 package com.droidsandfriends;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class ManageRegistrationsServlet extends HttpServlet {
@@ -25,8 +24,15 @@ public class ManageRegistrationsServlet extends HttpServlet {
 
     boolean isAscending = "1".equals(request.getParameter("a"));
     request.setAttribute("isAscending", isAscending);
-    
-    request.setAttribute("registrations", Registration.findAll(orderBy, isAscending));
+
+    String eventId = request.getParameter("eventId");
+    request.setAttribute("eventId", eventId);
+
+    String group = request.getParameter("group");
+    request.setAttribute("group", group);
+
+    request.setAttribute("events", Event.findAll());
+    request.setAttribute("registrations", Registration.findAll(orderBy, isAscending, eventId, group));
    
     // Render form.
     request.getRequestDispatcher("manageregistrations.jsp").forward(request, response);
@@ -35,7 +41,9 @@ public class ManageRegistrationsServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    Registration.deleteByIds(request.getParameterValues("delete"));
+    if ("delete".equals(request.getParameter("action"))) {
+      Registration.deleteByIds(request.getParameterValues("delete"));
+    }
     doGet(request, response);
   }
 
