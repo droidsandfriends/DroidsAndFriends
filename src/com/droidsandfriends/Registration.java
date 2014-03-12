@@ -1,7 +1,6 @@
 package com.droidsandfriends;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -185,18 +184,18 @@ public class Registration {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Registrations", "default");
 
-    Query query = new Query("Registration", parentKey);
-    Query.Filter filter = constructFilter(eventId, group);
-    if (filter != null) {
-      query.setFilter(filter);
-    }
-    query.addSort(orderBy.getName(), isAscending ? Query.SortDirection.ASCENDING : Query.SortDirection.DESCENDING);
+    Query query = new Query("Registration", parentKey).addSort(orderBy.getName(), isAscending
+        ? Query.SortDirection.ASCENDING
+        : Query.SortDirection.DESCENDING);
 
     List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
     List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
-      if (!onlyGooglers || registration.isGoogler()) {
+      // In-memory filtering, because DataStore indexes are a pain
+      if ((!onlyGooglers || registration.isGoogler())
+          && (group == null || group.equals("") || group.equals(registration.getRunGroup().toString()))
+          && (eventId == null || eventId.equals("") || eventId.equals(registration.getEventId()))) {
         registrations.add(registration);
       }
     }
@@ -204,19 +203,6 @@ public class Registration {
     return registrations;
   }
 
-  private static Query.Filter constructFilter(String eventId, String group) {
-    Query.Filter eventFilter = (eventId == null || eventId.length() == 0)
-        ? null
-        : new Query.FilterPredicate(Property.EVENT_ID.getName(), FilterOperator.EQUAL, eventId);
-    Query.Filter groupFilter = (group == null || group.length() == 0)
-        ? null
-        : new Query.FilterPredicate(Property.RUN_GROUP.getName(), FilterOperator.EQUAL, group);
-    if (eventFilter != null && groupFilter != null) {
-      return Query.CompositeFilterOperator.and(eventFilter, groupFilter);
-    }
-    return (eventFilter != null) ? eventFilter : groupFilter;
-  }
-  
   public static void deleteByIds(String[] ids) {
     if (ids == null || ids.length == 0)
       return;

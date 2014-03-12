@@ -128,6 +128,10 @@ public class Driver {
     }
   }
 
+  boolean isGoogler() {
+    return googleLdap != null && !googleLdap.equals("");
+  }
+
   public String getPhone() {
     return phone;
   }
@@ -189,20 +193,24 @@ public class Driver {
   }
 
   public static List<Driver> findAll() {
-    return findAll(Property.CREATE_DATE, true);
+    return findAll(Property.CREATE_DATE, true, /* experience */ null, /* onlyGooglers */ false);
   }
 
-  public static List<Driver> findAll(Property orderBy, boolean isAscending) {
+  public static List<Driver> findAll(Property orderBy, boolean isAscending, String experience, boolean onlyGooglers) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Drivers", "default");
     Query query = new Query("Driver", parentKey).addSort(orderBy.getName(), isAscending
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
-    List<Driver> drivers = new ArrayList<Driver>(entities.size());
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
+    List<Driver> drivers = new ArrayList<>(entities.size());
     for (Entity driverEntity : entities) {
       Driver driver = new Driver(driverEntity);
-      drivers.add(driver);
+      // In-memory filtering, because DataStore indices are a pain to work with
+      if ((!onlyGooglers || driver.isGoogler()) &&
+          (experience == null || experience.equals("") || experience.equals(driver.getExperience().toString()))) {
+        drivers.add(driver);
+      }
     }
     return drivers;
   }

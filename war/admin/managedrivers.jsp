@@ -12,6 +12,26 @@
   <dnf:nav current="managedrivers"/>
   <h1>Drivers</h1>
   <form action="managedrivers" autocomplete="on" id="theForm" method="post">
+    <input type="hidden" id="action" name="action" value="">
+    <fieldset style="text-align: center">
+      <label>
+        Experience:
+        <select id="experience" name="experience">
+          <option value="">All</option>
+          <c:forEach items="${requestScope.optionMap[\"EXPERIENCE\"]}" var="experience">
+            <option value="${experience}"<c:if test="${requestScope.experience == experience}"> selected</c:if>>
+              ${experience} (${experience.label})
+            </option>
+          </c:forEach>
+        </select>
+      </label>
+      &nbsp;
+      <label>
+        Only Googlers
+        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.onlyGooglers}">
+               checked</c:if>>
+      </label>
+    </fieldset>
     <table class="dnf-admin">
       <thead>
         <tr>
@@ -64,8 +84,19 @@
       }
     });
 
-    $addHandler($('deleteButton'), 'click', function(e) {
+    $addHandler($('experience'), 'change', function () {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    });
+
+    $addHandler($('onlyGooglers'), 'change', function () {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    });
+
+    $addHandler($('deleteButton'), 'click', function () {
       if (confirm("Are you sure?")) {
+        $('action').value = 'delete';
         $('theForm').submit();
       }
     });

@@ -1,23 +1,11 @@
 package com.droidsandfriends;
 
+import com.google.appengine.api.datastore.*;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.DatastoreTimeoutException;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
 
 public class Event {
   
@@ -181,8 +169,8 @@ public class Event {
     Query query = new Query("Event", parentKey).addSort(orderBy.getName(), isAscending 
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
-    List<Event> events = new ArrayList<Event>(entities.size());
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(100));
+    List<Event> events = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Event event = new Event(entity);
       events.add(event);

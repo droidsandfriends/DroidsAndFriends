@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <datastore-indexes autoGenerate="false">
-
-  <!-- Used 36 times in query history -->
+  <!-- Used 34 times in query history -->
   <datastore-index kind="Event" ancestor="true" source="auto">
     <property name="date" direction="asc"/>
   </datastore-index>
 
-  <!-- Used 7 times in query history -->
+  <!-- Used 4 times in query history -->
   <datastore-index kind="Registration" ancestor="true" source="auto">
+    <property name="createDate" direction="asc"/>
+  </datastore-index>
+
+  <!-- Used 12 times in query history -->
+  <datastore-index kind="Driver" ancestor="true" source="auto">
     <property name="createDate" direction="desc"/>
   </datastore-index>
 
-  <!-- Used 2 times in query history -->
-  <datastore-index kind="Driver" ancestor="true" source="auto">
+  <!-- Used 11 times in query history -->
+  <datastore-index kind="Registration" ancestor="true" source="auto">
     <property name="createDate" direction="desc"/>
   </datastore-index>
 
@@ -66,7 +70,7 @@
     <property name="experience" direction="desc"/>
   </datastore-index>
 
-  <!-- Used 1 time in query history -->
+  <!-- Used 2 times in query history -->
   <datastore-index kind="Driver" ancestor="true" source="auto">
     <property name="gasCard" direction="asc"/>
   </datastore-index>
@@ -76,7 +80,7 @@
     <property name="gasCard" direction="desc"/>
   </datastore-index>
 
-  <!-- Used 1 time in query history -->
+  <!-- Used 2 times in query history -->
   <datastore-index kind="Driver" ancestor="true" source="auto">
     <property name="email" direction="asc"/>
   </datastore-index>
@@ -288,36 +292,12 @@
 
   <!-- Used 1 time in query history -->
   <datastore-index kind="Registration" ancestor="true" source="auto">
-    <property name="createDate" direction="asc"/>
-  </datastore-index>
-
-  <!-- Used 1 time in query history -->
-  <datastore-index kind="Registration" ancestor="true" source="auto">
     <property name="updateDate" direction="asc"/>
   </datastore-index>
 
   <!-- Used 1 time in query history -->
   <datastore-index kind="Registration" ancestor="true" source="auto">
     <property name="updateDate" direction="desc"/>
-  </datastore-index>
-
-  <!-- Used 5 times in query history -->
-  <datastore-index kind="Registration" ancestor="true" source="auto">
-    <property name="eventId" direction="asc"/>
-    <property name="createDate" direction="desc"/>
-  </datastore-index>
-
-  <!-- Used 1 time in query history -->
-  <datastore-index kind="Registration" ancestor="true" source="auto">
-    <property name="runGroup" direction="asc"/>
-    <property name="createDate" direction="desc"/>
-  </datastore-index>
-
-  <!-- Used 1 time in query history -->
-  <datastore-index kind="Registration" ancestor="true" source="auto">
-    <property name="eventId" direction="asc"/>
-    <property name="runGroup" direction="asc"/>
-    <property name="createDate" direction="desc"/>
   </datastore-index>
 
   <!-- Used 2 times in query history -->
@@ -379,11 +359,4 @@
   <datastore-index kind="Transaction" ancestor="true" source="auto">
     <property name="updateDate" direction="desc"/>
   </datastore-index>
-
-  <!-- Used 2 times in query history -->
-  <datastore-index kind="Registration" ancestor="true" source="auto">
-    <property name="eventId" direction="asc"/>
-    <property name="createDate" direction="asc"/>
-  </datastore-index>
-
 </datastore-indexes>
