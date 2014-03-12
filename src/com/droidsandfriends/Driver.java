@@ -1,21 +1,9 @@
 package com.droidsandfriends;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import com.google.appengine.api.datastore.*;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.DatastoreTimeoutException;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
+import java.util.*;
+import java.util.logging.Logger;
 
 public class Driver {
   
@@ -31,6 +19,7 @@ public class Driver {
   private String about;
   private GasCard gasCard;
   private String email;
+  private String googleLdap;
   private String phone;
   private String emergencyName;
   private String emergencyPhone;
@@ -38,8 +27,8 @@ public class Driver {
   private Date updateDate;
   
   private Driver(String id, String customerId, MembershipStatus membershipStatus, String name, String car,
-      String referrer, Experience experience, String about, GasCard gasCard, String email, String phone,
-      String emergencyName, String emergencyPhone, Date createDate, Date updateDate) {
+      String referrer, Experience experience, String about, GasCard gasCard, String email, String googleLdap,
+      String phone, String emergencyName, String emergencyPhone, Date createDate, Date updateDate) {
     this.id = id;
     this.customerId = customerId;
     this.membershipStatus = membershipStatus;
@@ -50,6 +39,7 @@ public class Driver {
     this.about = about;
     this.gasCard = gasCard;
     this.email = email;
+    this.googleLdap = googleLdap;
     this.phone = phone;
     this.emergencyName = emergencyName;
     this.emergencyPhone = emergencyPhone;
@@ -69,6 +59,7 @@ public class Driver {
         Entities.getString(entity, Property.ABOUT),
         Entities.getGasCard(entity, Property.GAS_CARD),
         Entities.getString(entity, Property.EMAIL),
+        Entities.getString(entity, Property.GOOGLE_LDAP),
         Entities.getString(entity, Property.PHONE),
         Entities.getString(entity, Property.EMERGENCY_NAME),
         Entities.getString(entity, Property.EMERGENCY_PHONE),
@@ -126,6 +117,17 @@ public class Driver {
     return email;
   }
 
+  public String getGoogleLdap() {
+    return googleLdap;
+  }
+
+  void guessGoogleLdap() {
+    if ((this.googleLdap == null || this.googleLdap.length() == 0)
+        && this.email != null && this.email.endsWith("@google.com")) {
+      this.googleLdap = this.email.substring(0, this.email.indexOf('@'));
+    }
+  }
+
   public String getPhone() {
     return phone;
   }
@@ -149,7 +151,7 @@ public class Driver {
   /**
    * Returns the Driver object owned by the given Google user ID.
    * 
-   * @param id Driver entity name (the Google user ID of the owner)
+   * @param userId Driver entity name (the Google user ID of the owner)
    * @return Driver object initialized from the datastore, null if not found
    */
   public static Driver findById(String userId) {
@@ -180,8 +182,10 @@ public class Driver {
   }
 
   public static Driver createNew(String userId, String email) {
-    return new Driver(userId, null, MembershipStatus.NEW, null, null, null, Experience.A, null, GasCard.NONE, email,
-        null, null, null, new Date(), null);
+    Driver driver = new Driver(userId, null, MembershipStatus.NEW, null, null, null, Experience.A, null, GasCard.NONE,
+        email, null, null, null, null, new Date(), null);
+    driver.guessGoogleLdap();
+    return driver;
   }
 
   public static List<Driver> findAll() {
@@ -242,6 +246,7 @@ public class Driver {
         ? Properties.validateGasCard(Property.GAS_CARD, parameterMap, errors)
         : GasCard.NONE;
     this.email = Properties.validateEmail(Property.EMAIL, parameterMap, errors);
+    this.googleLdap = Properties.validateOptionalString(Property.GOOGLE_LDAP, parameterMap, errors);
     this.phone = Properties.validatePhone(Property.PHONE, parameterMap, errors);
     this.emergencyName = Properties.validateString(Property.EMERGENCY_NAME, parameterMap, errors);
     this.emergencyPhone = Properties.validatePhone(Property.EMERGENCY_PHONE, parameterMap, errors);
@@ -269,6 +274,8 @@ public class Driver {
           entity = new Entity(key);
         }
 
+        this.guessGoogleLdap();
+
         Entities.setString(entity, Property.ID, this.id);
         Entities.setString(entity, Property.CUSTOMER_ID, this.customerId);
         Entities.setMembershipStatus(entity, Property.MEMBERSHIP_STATUS, this.membershipStatus);
@@ -282,6 +289,7 @@ public class Driver {
             ? this.gasCard
             : GasCard.NONE);
         Entities.setString(entity, Property.EMAIL, this.email);
+        Entities.setString(entity, Property.GOOGLE_LDAP, this.googleLdap);
         Entities.setString(entity, Property.PHONE, this.phone);
         Entities.setString(entity, Property.EMERGENCY_NAME, this.emergencyName);
         Entities.setString(entity, Property.EMERGENCY_PHONE, this.emergencyPhone);
@@ -315,9 +323,9 @@ public class Driver {
   @Override
   public String toString() {
     return String.format("{id: %s, customerId: %s, membershipStatus: %s, name: %s, car: %s, referrer: %s, "
-        + "experience: %s, about: %s, gasCard: %s, email: %s, emergencyName: %s, "
+        + "experience: %s, about: %s, gasCard: %s, email: %s, googleLdap: %s, emergencyName: %s, "
         + "emergencyPhone: %s, createDate: %s, updateDate: %s}", id, customerId, membershipStatus, name, car, referrer,
-        experience, about, gasCard, email, emergencyName, emergencyPhone, createDate, updateDate);
+        experience, about, gasCard, email, googleLdap, emergencyName, emergencyPhone, createDate, updateDate);
   }
 
 }

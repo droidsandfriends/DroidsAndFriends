@@ -23,9 +23,8 @@
           <dnf:th property="EXPERIENCE" label="Group"/>
           <dnf:th property="GAS_CARD"/>
           <dnf:th property="EMAIL"/>
+          <dnf:th property="GOOGLE_LDAP"/>
           <dnf:th property="PHONE"/>
-          <dnf:th property="EMERGENCY_NAME"/>
-          <dnf:th property="EMERGENCY_PHONE"/>
           <dnf:th property="CREATE_DATE"/>
           <dnf:th property="UPDATE_DATE"/>
         </tr>
@@ -41,15 +40,14 @@
             <td class="dnf-group-${driver.experience}" title="${fn:escapeXml(driver.about)}">${driver.experience}</td>
             <td>${driver.gasCard.label}</td>
             <td>${fn:escapeXml(driver.email)}</td>
+            <td>${fn:escapeXml(driver.googleLdap)}</td>
             <td>${fn:escapeXml(driver.phone)}</td>
-            <td>${fn:escapeXml(driver.emergencyName)}</td>
-            <td>${fn:escapeXml(driver.emergencyPhone)}</td>
             <td title="${driver.createDate}"><fmt:formatDate value="${driver.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${driver.updateDate}"><fmt:formatDate value="${driver.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="13">${fn:length(drivers)} drivers</td>
+          <td class="dnf-admin-footer" colspan="12">${fn:length(drivers)} drivers</td>
         </tr>
       </tbody>
     </table>

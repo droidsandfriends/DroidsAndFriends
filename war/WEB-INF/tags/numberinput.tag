@@ -1,7 +1,7 @@
 <%@ attribute name="property" required="true" %>
+<%@ attribute name="min" required="true" %>
+<%@ attribute name="max" required="true" %>
 <%@ attribute name="value" required="false" %>
-<%@ attribute name="min" required="false" %>
-<%@ attribute name="max" required="false" %>
 <%@ attribute name="optional" required="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>

@@ -31,8 +31,11 @@ public class ManageRegistrationsServlet extends HttpServlet {
     String group = request.getParameter("group");
     request.setAttribute("group", group);
 
+    boolean onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
+    request.setAttribute("onlyGooglers", onlyGooglers);
+
     request.setAttribute("events", Event.findAll());
-    request.setAttribute("registrations", Registration.findAll(orderBy, isAscending, eventId, group));
+    request.setAttribute("registrations", Registration.findAll(orderBy, isAscending, eventId, group, onlyGooglers));
    
     // Render form.
     request.getRequestDispatcher("manageregistrations.jsp").forward(request, response);

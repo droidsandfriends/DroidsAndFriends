@@ -20,6 +20,7 @@ public enum Property {
   ABOUT("about", "About you", "Tell us more about your driving background, track experience,<br>or anything else you'd like us to know about you"),
   GAS_CARD("gasCard", "Preferred<br>gas card", "Prepaid gas card brand preference (for instructors only)"),
   EMAIL("email", "Email", "Email address where you'd like to receive Droids & Friends messages"),
+  GOOGLE_LDAP("googleLdap", "Google LDAP", "Google LDAP (if Googler)"),
   PHONE("phone", "Phone", "Mobile phone number with area code"),
   EMERGENCY_NAME("emergencyName", "Emergency<br>contact", "Person to call in case of an emergency"),
   EMERGENCY_PHONE("emergencyPhone", "Emergency<br>phone", "Number to call in case of an emergency"),
@@ -31,8 +32,8 @@ public enum Property {
   B("b", "Group B"),
   C("c", "Group C"),
   X("x", "Group X"),
-  DRIVER_PRICE("driverPrice", "Driver Price"),
-  GUEST_PRICE("guestPrice", "Guest Price"),
+  DRIVER_PRICE("driverPrice", "Driver<br>Price"),
+  GUEST_PRICE("guestPrice", "Guest<br>Price"),
   
   // Registration properties
   EVENT_ID("eventId", "Event"),

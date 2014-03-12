@@ -9,31 +9,34 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("serial")
-public class ManageDriverServlet extends HttpServlet {
+public class ManageRegistrationServlet extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String id = request.getParameter("id");
-    if (id == null || id.length() == 0) {
-      // We only manage existing drivers; we don't create new ones
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return;
-    }
-    
-    Driver driver = Driver.findById(id);
-    if (driver == null) {
-      // Invalid ID?
+    Registration registration = (id == null || id.length() == 0) ? null : Registration.findById(id);
+
+    if (registration == null) {
+      // Not found
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 
-    // If the driver has no Google LDAP, guess
-    driver.guessGoogleLdap();
+    // If email is missing, fill it in
+    String email = registration.getEmail();
+    if (email == null || email.length() == 0) {
+      Driver driver = Driver.findById(registration.getUserId());
+      if (driver != null) {
+        driver.guessGoogleLdap();
+        registration.setEmail(driver.getEmail());
+        registration.setGoogleLdap(driver.getGoogleLdap());
+      }
+    }
 
     // Render form
-    request.setAttribute("driver", driver);
-    request.getRequestDispatcher("managedriver.jsp").forward(request, response);
+    request.setAttribute("registration", registration);
+    request.getRequestDispatcher("manageregistration.jsp").forward(request, response);
     return;
   }
 
@@ -43,26 +46,25 @@ public class ManageDriverServlet extends HttpServlet {
       throws ServletException, IOException {
     String id = request.getParameter("id");
     if (id == null || id.length() == 0) {
-      // We only manage existing drivers; we don't create new ones
+      // We only manage existing registrations; we don't create new ones
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    
-    Driver driver = Driver.findById(id);
-    if (driver == null) {
+
+    Registration registration = Registration.findById(id);
+    if (registration == null) {
       // Invalid ID?
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
-    
-    // Update driver record from request parameters
-    List<String> errors = driver.update((Map<String, String[]>) request.getParameterMap(),
-        /* allowMembershipStatusUpdate */ true);
+
+    // Update registration record from request parameters
+    List<String> errors = registration.update((Map<String, String[]>) request.getParameterMap());
     if (errors.isEmpty()) {
       // TODO: Handle database errors
       try {
-        driver.save();
-        response.sendRedirect("managedrivers");
+        registration.save();
+        response.sendRedirect("manageregistrations");
         return;
       } catch (Exception e) {
         errors.add(e.toString());
@@ -71,8 +73,8 @@ public class ManageDriverServlet extends HttpServlet {
 
     // Render form
     request.setAttribute("errors", errors);
-    request.setAttribute("driver", driver);
-    request.getRequestDispatcher("managedriver.jsp").forward(request, response);
+    request.setAttribute("registration", registration);
+    request.getRequestDispatcher("manageregistration.jsp").forward(request, response);
     return;
   }
 }

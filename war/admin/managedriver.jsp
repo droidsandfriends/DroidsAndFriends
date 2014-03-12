@@ -23,6 +23,7 @@
         <dnf:optioninput property="GAS_CARD" value="${driver.gasCard}"/>
         <dnf:textareainput property="ABOUT" value="${driver.about}" optional="true"/>
         <dnf:textinput property="EMAIL" value="${driver.email}"/>
+        <dnf:textinput property="GOOGLE_LDAP" value="${driver.googleLdap}" optional="true"/>
         <dnf:textinput property="PHONE"  value="${driver.phone}" example="(555) 555-5555"/>
         <dnf:textinput property="EMERGENCY_NAME" value="${driver.emergencyName}"/>
         <dnf:textinput property="EMERGENCY_PHONE" value="${driver.emergencyPhone}" example="(555) 555-5555"/>

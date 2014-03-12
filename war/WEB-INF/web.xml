@@ -106,6 +106,15 @@
     <url-pattern>/admin/manageregistrations</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ManageRegistration</servlet-name>
+    <servlet-class>com.droidsandfriends.ManageRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageRegistration</servlet-name>
+    <url-pattern>/admin/manageregistration</url-pattern>
+  </servlet-mapping>
+
   <!-- Filters-->
   <filter>
     <filter-name>UserFilter</filter-name>

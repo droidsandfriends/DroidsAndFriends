@@ -33,6 +33,10 @@
         </select>
       </label>
       &nbsp;
+      <label>
+        Only Googlers
+        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.onlyGooglers}"> checked</c:if>>
+      </label>
     </fieldset>
     <table class="dnf-admin">
       <thead>
@@ -41,6 +45,8 @@
           <th title="Registration">Reg</th>
           <dnf:th property="NAME"/>
           <dnf:th property="CAR"/>
+          <dnf:th property="EMAIL"/>
+          <dnf:th property="GOOGLE_LDAP"/>
           <dnf:th property="DATE"/>
           <dnf:th property="RUN_GROUP" label="Group"/>
           <dnf:th property="GUEST_COUNT"/>
@@ -57,6 +63,8 @@
             <td><a href="manageregistration?id=${registration.id}" title="${registration.id}">Edit</a></td>
             <td><a href="managedriver?id=${registration.userId}">${fn:escapeXml(registration.name)}</a></td>
             <td>${fn:escapeXml(registration.car)}</td>
+            <td>${fn:escapeXml(registration.email)}</td>
+            <td>${fn:escapeXml(registration.googleLdap)}</td>
             <td><a href="manageevent?id=${registration.eventId}"><fmt:formatDate value="${registration.date}" pattern="MMMM d, yyyy"/></a></td>
             <td class="dnf-group-${registration.runGroup}">${registration.runGroup}</td>
             <td class="dnf-number">${registration.guestCount}</td>
@@ -66,7 +74,7 @@
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="10">${fn:length(requestScope.registrations)} registrations</td>
+          <td class="dnf-admin-footer" colspan="12">${fn:length(requestScope.registrations)} registrations</td>
         </tr>
       </tbody>
     </table>
@@ -89,6 +97,11 @@
     });
 
     $addHandler($('group'), 'change', function () {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    });
+
+    $addHandler($('onlyGooglers'), 'change', function () {
       $('action').value = 'filter';
       $('theForm').submit();
     });

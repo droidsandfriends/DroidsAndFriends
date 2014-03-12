@@ -15,7 +15,9 @@
   <input type="hidden" name="id" value="${transaction.id}">
   <table>
     <fmt:formatNumber value="${transaction.dollarAmount}" type="currency" var="dollarAmount"/>
-    <dnf:textinput property="USER_ID" value="" optional="true" readonly="true"><a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a></dnf:textinput>
+    <dnf:textinput property="NAME" value="" optional="true" readonly="true">
+      <a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a>
+    </dnf:textinput>
     <dnf:textinput property="AMOUNT" value="${dollarAmount}" optional="true" readonly="true"/>
     <dnf:textinput property="DESCRIPTION" value="${transaction.description}" optional="true" readonly="true"/>
   </table>

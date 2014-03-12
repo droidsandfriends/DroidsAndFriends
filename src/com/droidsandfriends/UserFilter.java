@@ -1,22 +1,16 @@
 package com.droidsandfriends;
 
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 public class UserFilter implements Filter {
   
@@ -44,6 +38,7 @@ public class UserFilter implements Filter {
       Map<String, List<Option>> optionMap = new HashMap<String, List<Option>>();
       optionMap.put(Property.MEMBERSHIP_STATUS.toString(), MembershipStatus.getOptionList());
       optionMap.put(Property.EXPERIENCE.toString(), Experience.getOptionList());
+      optionMap.put(Property.RUN_GROUP.toString(), Experience.getOptionList());
       optionMap.put(Property.GAS_CARD.toString(), GasCard.getOptionList());
       optionMap.put(Property.VENUE.toString(), Venue.getOptionList());
       request.setAttribute("optionMap", optionMap);

@@ -3,10 +3,7 @@ package com.droidsandfriends;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Registration {
@@ -17,6 +14,8 @@ public class Registration {
   private String userId;        // Datastore entity name of the driver; same as the Google user ID
   private String name;          // Driver's name
   private String car;           // Driver's car
+  private String email;         // Driver's email
+  private String googleLdap;    // Driver's Google LDAP (if Googler)
   private String eventId;       // Datastore entity name of the event for which the driver registered
   private Date date;            // Event date
   private Experience runGroup;  // Run group for which the driver registered
@@ -26,12 +25,15 @@ public class Registration {
   private Date updateDate;      // Entity update timestamp
 
   
-  private Registration(String id, String userId, String name, String car, String eventId, Date date,
-      Experience runGroup, long guestCount, String transactionId, Date createDate, Date updateDate) {
+  private Registration(String id, String userId, String name, String car, String email, String googleLdap,
+                       String eventId, Date date, Experience runGroup, long guestCount, String transactionId,
+                       Date createDate, Date updateDate) {
     this.id = id;
     this.userId = userId;
     this.name = name;
     this.car = car;
+    this.email = email;
+    this.googleLdap = googleLdap;
     this.eventId = eventId;
     this.date = date;
     this.runGroup = runGroup;
@@ -47,6 +49,8 @@ public class Registration {
         Entities.getString(entity, Property.USER_ID),
         Entities.getString(entity, Property.NAME),
         Entities.getString(entity, Property.CAR),
+        Entities.getString(entity, Property.EMAIL),
+        Entities.getString(entity, Property.GOOGLE_LDAP),
         Entities.getString(entity, Property.EVENT_ID),
         Entities.getDate(entity, Property.DATE),
         Entities.getExperience(entity, Property.RUN_GROUP),
@@ -70,6 +74,26 @@ public class Registration {
 
   public String getCar() {
     return car;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getGoogleLdap() {
+    return googleLdap;
+  }
+
+  void setGoogleLdap(String googleLdap) {
+    this.googleLdap = googleLdap;
+  }
+
+  boolean isGoogler() {
+    return this.googleLdap != null && this.googleLdap.length() != 0;
   }
 
   public String getEventId() {
@@ -108,6 +132,8 @@ public class Registration {
         userId,
         /* name */ null,
         /* car */ null,
+        /* email */ null,
+        /* googleLdap */ null,
         eventId,
         /* date */ null,
         runGroup,
@@ -142,18 +168,20 @@ public class Registration {
   }
   
   public static List<Registration> findAll() {
-    return findAll(Property.CREATE_DATE, /* isAscending */ true, /* eventId */ null, /* group */ null);
+    return findAll(Property.CREATE_DATE, /* isAscending */ true, /* eventId */ null, /* group */ null,
+        /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAllByEventId(String eventId) {
-    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null);
+    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null, /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAll(Property orderBy, boolean isAscending) {
-    return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null);
+    return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null, /* onlyGooglers */ false);
   }
 
-  public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, String group) {
+  public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, String group,
+                                           boolean onlyGooglers) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Registrations", "default");
 
@@ -168,7 +196,9 @@ public class Registration {
     List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
-      registrations.add(registration);
+      if (!onlyGooglers || registration.isGoogler()) {
+        registrations.add(registration);
+      }
     }
 
     return registrations;
@@ -200,7 +230,21 @@ public class Registration {
   static void deleteByKeys(Iterable<Key> keys) {
     DatastoreServiceFactory.getDatastoreService().delete(keys);
   }
-  
+
+  public List<String> update(Map<String, String[]> parameterMap) {
+    List<String> errors = new ArrayList<>();
+
+    this.name = Properties.validateString(Property.NAME, parameterMap, errors);
+    this.car = Properties.validateString(Property.CAR, parameterMap, errors);
+    this.email = Properties.validateEmail(Property.EMAIL, parameterMap, errors);
+    this.googleLdap = Properties.validateOptionalString(Property.GOOGLE_LDAP, parameterMap, errors);
+    this.runGroup = Properties.validateExperience(Property.RUN_GROUP, parameterMap, errors);
+    this.guestCount = Long.parseLong(parameterMap.get(Property.GUEST_COUNT.getName())[0], 10);
+    this.updateDate = new Date();
+
+    return errors;
+  }
+
   public boolean save() {
     Key key = getKeyFromId(this.id);
     Key driverKey = Driver.getKeyFromId(this.userId);
@@ -223,11 +267,14 @@ public class Registration {
         }
 
         // Join on save
-        if (this.name == null || this.car == null) {
+        if (this.name == null || this.car == null || this.email == null) {
           Driver driver = Driver.findByKey(driverKey);
           this.name = driver.getName();
           this.car = driver.getCar();
+          this.email = driver.getEmail();
+          this.googleLdap = driver.getGoogleLdap();
         }
+
         if (this.date == null) {
           Event event = Event.findByKey(eventKey);
           this.date = event.getDate();
@@ -237,6 +284,8 @@ public class Registration {
         Entities.setString(entity, Property.USER_ID, this.userId);
         Entities.setString(entity, Property.NAME, this.name);
         Entities.setString(entity, Property.CAR, this.car);
+        Entities.setString(entity, Property.EMAIL, this.email);
+        Entities.setString(entity, Property.GOOGLE_LDAP, this.googleLdap);
         Entities.setString(entity, Property.EVENT_ID, this.eventId);
         Entities.setDate(entity, Property.DATE, this.date);
         Entities.setExperience(entity, Property.RUN_GROUP, this.runGroup);
@@ -271,9 +320,10 @@ public class Registration {
 
   @Override
   public String toString() {
-    return String.format("{id: %s, userId: %s, name: %s, car: %s, eventId: %s, date: %s, runGroup: %s, guestCount: %d, "
-        + "transactionId: %s, createDate: %s, updateDate: %s}",
-        id, userId, name, car, eventId, date, runGroup, guestCount, transactionId, createDate, updateDate);
+    return String.format("{id: %s, userId: %s, name: %s, car: %s, email: %s, googleLdap: %s, eventId: %s, date: %s, "
+        + "runGroup: %s, guestCount: %d, transactionId: %s, createDate: %s, updateDate: %s}",
+        id, userId, name, car, email, googleLdap, eventId, date, runGroup, guestCount, transactionId, createDate,
+        updateDate);
   }
 
 }
