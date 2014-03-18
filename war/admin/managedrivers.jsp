@@ -75,6 +75,9 @@
   <div class="dnf-button-bar">
     <button class="dnf-delete-button" id="deleteButton">Delete</button>
   </div>
+  <fieldset style="text-align: center">
+    <textarea cols="80" rows="10">${fn:escapeXml(mailingList)}</textarea>
+  </fieldset>
   <script type="text/javascript">
     $addHandler($('theForm'), 'submit', function(e) {
       if (e.preventDefault) {
