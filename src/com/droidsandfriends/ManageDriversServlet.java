@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ManageDriversServlet extends HttpServlet {
@@ -31,7 +32,16 @@ public class ManageDriversServlet extends HttpServlet {
     boolean onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
     request.setAttribute("onlyGooglers", onlyGooglers);
 
-    request.setAttribute("drivers", Driver.findAll(orderBy, isAscending, experience, onlyGooglers));
+    List<Driver> drivers = Driver.findAll(orderBy, isAscending, experience, onlyGooglers);
+    request.setAttribute("drivers", drivers);
+
+    StringBuilder mailingList = new StringBuilder();
+    for (Driver driver : drivers) {
+      mailingList.append(String.format("\"%s\" <%s>, ", driver.getName(), onlyGooglers
+          ? driver.getGoogleLdap() + "@google.com"
+          : driver.getEmail()));
+    }
+    request.setAttribute("mailingList", mailingList);
    
     // Render form.
     request.getRequestDispatcher("/admin/managedrivers.jsp").forward(request, response);
