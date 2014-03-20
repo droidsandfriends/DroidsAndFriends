@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ManageRegistrationsServlet extends HttpServlet {
@@ -35,8 +36,18 @@ public class ManageRegistrationsServlet extends HttpServlet {
     request.setAttribute("onlyGooglers", onlyGooglers);
 
     request.setAttribute("events", Event.findAll());
-    request.setAttribute("registrations", Registration.findAll(orderBy, isAscending, eventId, group, onlyGooglers));
-   
+
+    List<Registration> registrations = Registration.findAll(orderBy, isAscending, eventId, group, onlyGooglers);
+    request.setAttribute("registrations", registrations);
+
+    StringBuilder mailingList = new StringBuilder();
+    for (Registration registration : registrations) {
+      mailingList.append(String.format("\"%s\" <%s>, ", registration.getName(), onlyGooglers
+          ? registration.getGoogleLdap() + "@google.com"
+          : registration.getEmail()));
+    }
+    request.setAttribute("mailingList", mailingList);
+
     // Render form.
     request.getRequestDispatcher("manageregistrations.jsp").forward(request, response);
   }
