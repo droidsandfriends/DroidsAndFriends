@@ -1,12 +1,11 @@
 package com.droidsandfriends;
 
-import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class ManageEventsServlet extends HttpServlet {
@@ -14,20 +13,12 @@ public class ManageEventsServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
+    PageState pageState = PageState.get(request);
+    request.setAttribute("pageState", pageState);
 
-    // Handle sort order.
-    Property orderBy;
-    try {
-      orderBy = Property.valueOf(request.getParameter("o"));
-    } catch (Exception e) {
-      orderBy = Property.DATE;
-    }
-    request.setAttribute("orderBy", orderBy);
+    pageState.handleSort(request);
 
-    boolean isAscending = !"0".equals(request.getParameter("a"));
-    request.setAttribute("isAscending", isAscending);
-
-    List<Event> events = Event.findAll(orderBy, isAscending);
+    List<Event> events = Event.findAll(pageState.getOrderBy(), pageState.isAscending());
     request.setAttribute("events", events);
 
     // Render form.

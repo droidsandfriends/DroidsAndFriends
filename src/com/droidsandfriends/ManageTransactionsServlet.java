@@ -1,11 +1,10 @@
 package com.droidsandfriends;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class ManageTransactionsServlet extends HttpServlet {
@@ -13,20 +12,12 @@ public class ManageTransactionsServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    PageState pageState = PageState.get(request);
+    request.setAttribute("pageState", pageState);
 
-    // Handle sort order.
-    Property orderBy;
-    try {
-      orderBy = Property.valueOf(request.getParameter("o"));
-    } catch (Exception e) {
-      orderBy = Property.CREATE_DATE;
-    }
-    request.setAttribute("orderBy", orderBy);
+    pageState.handleSort(request);
 
-    boolean isAscending = "1".equals(request.getParameter("a"));
-    request.setAttribute("isAscending", isAscending);
-    
-    request.setAttribute("transactions", Transaction.findAll(orderBy, isAscending));
+    request.setAttribute("transactions", Transaction.findAll(pageState.getOrderBy(), pageState.isAscending()));
    
     // Render form.
     request.getRequestDispatcher("managetransactions.jsp").forward(request, response);

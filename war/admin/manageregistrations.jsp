@@ -18,24 +18,24 @@
         <select id="eventId" name="eventId">
           <option value="">All</option>
           <c:forEach items="${requestScope.events}" var="event">
-            <option value="${event.id}"<c:if test="${requestScope.eventId == event.id}"> selected</c:if>><fmt:formatDate value="${event.date}" pattern="MMMM d, yyyy"/></option>
+            <option value="${event.id}"<c:if test="${requestScope.pageState.eventId == event.id}"> selected</c:if>><fmt:formatDate value="${event.date}" pattern="MMMM d, yyyy"/></option>
           </c:forEach>
         </select>
       </label>
       &nbsp;
       <label>
         Group:
-        <select id ="group" name="group">
+        <select id ="experience" name="experience">
           <option value="">All</option>
-          <c:forEach items="${requestScope.optionMap[\"EXPERIENCE\"]}" var="group">
-            <option value="${group}"<c:if test="${requestScope.group == group}"> selected</c:if>>${group} (${group.label})</option>
+          <c:forEach items="${requestScope.optionMap[\"EXPERIENCE\"]}" var="experience">
+            <option value="${experience}"<c:if test="${requestScope.pageState.experience == experience}"> selected</c:if>>${experience} (${experience.label})</option>
           </c:forEach>
         </select>
       </label>
       &nbsp;
       <label>
         Only Googlers
-        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.onlyGooglers}"> checked</c:if>>
+        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.pageState.onlyGooglers}"> checked</c:if>>
       </label>
     </fieldset>
     <table class="dnf-admin">
@@ -99,7 +99,7 @@
       $('theForm').submit();
     });
 
-    $addHandler($('group'), 'change', function () {
+    $addHandler($('experience'), 'change', function () {
       $('action').value = 'filter';
       $('theForm').submit();
     });

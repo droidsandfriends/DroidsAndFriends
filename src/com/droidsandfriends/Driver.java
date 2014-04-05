@@ -196,7 +196,7 @@ public class Driver {
     return findAll(Property.CREATE_DATE, true, /* experience */ null, /* onlyGooglers */ false);
   }
 
-  public static List<Driver> findAll(Property orderBy, boolean isAscending, String experience, boolean onlyGooglers) {
+  public static List<Driver> findAll(Property orderBy, boolean isAscending, Experience experience, boolean onlyGooglers) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Drivers", "default");
     Query query = new Query("Driver", parentKey).addSort(orderBy.getName(), isAscending
@@ -208,7 +208,7 @@ public class Driver {
       Driver driver = new Driver(driverEntity);
       // In-memory filtering, because DataStore indices are a pain to work with
       if ((!onlyGooglers || driver.isGoogler()) &&
-          (experience == null || experience.equals("") || experience.equals(driver.getExperience().toString()))) {
+          (experience == null || experience.equals(driver.getExperience()))) {
         drivers.add(driver);
       }
     }

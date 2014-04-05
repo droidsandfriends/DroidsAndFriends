@@ -13,36 +13,22 @@ public class ManageRegistrationsServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    PageState pageState = PageState.get(request);
+    request.setAttribute("pageState", pageState);
 
-    // Handle sort order.
-    Property orderBy;
-    try {
-      orderBy = Property.valueOf(request.getParameter("o"));
-    } catch (Exception e) {
-      orderBy = Property.CREATE_DATE;
-    }
-    request.setAttribute("orderBy", orderBy);
+    pageState.handleSort(request);
 
-    boolean isAscending = "1".equals(request.getParameter("a"));
-    request.setAttribute("isAscending", isAscending);
+    List<Event> events = Event.findAll();
+    request.setAttribute("events", events);
 
-    String eventId = request.getParameter("eventId");
-    request.setAttribute("eventId", eventId);
-
-    String group = request.getParameter("group");
-    request.setAttribute("group", group);
-
-    boolean onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
-    request.setAttribute("onlyGooglers", onlyGooglers);
-
-    request.setAttribute("events", Event.findAll());
-
-    List<Registration> registrations = Registration.findAll(orderBy, isAscending, eventId, group, onlyGooglers);
+    List<Registration> registrations = Registration.findAll(
+        pageState.getOrderBy(), pageState.isAscending(), pageState.getEventId(),
+        pageState.getExperience(), pageState.isOnlyGooglers());
     request.setAttribute("registrations", registrations);
 
     StringBuilder mailingList = new StringBuilder();
     for (Registration registration : registrations) {
-      mailingList.append(String.format("\"%s\" <%s>, ", registration.getName(), onlyGooglers
+      mailingList.append(String.format("\"%s\" <%s>, ", registration.getName(), pageState.isOnlyGooglers()
           ? registration.getGoogleLdap() + "@google.com"
           : registration.getEmail()));
     }
@@ -57,6 +43,8 @@ public class ManageRegistrationsServlet extends HttpServlet {
       throws ServletException, IOException {
     if ("delete".equals(request.getParameter("action"))) {
       Registration.deleteByIds(request.getParameterValues("delete"));
+    } else if ("filter".equals(request.getParameter("action"))) {
+      PageState.get(request).handleFilter(request);
     }
     doGet(request, response);
   }

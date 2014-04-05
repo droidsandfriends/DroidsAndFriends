@@ -179,7 +179,7 @@ public class Registration {
     return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null, /* onlyGooglers */ false);
   }
 
-  public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, String group,
+  public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, Experience group,
                                            boolean onlyGooglers) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Registrations", "default");
@@ -194,7 +194,7 @@ public class Registration {
       Registration registration = new Registration(entity);
       // In-memory filtering, because DataStore indexes are a pain
       if ((!onlyGooglers || registration.isGoogler())
-          && (group == null || group.equals("") || group.equals(registration.getRunGroup().toString()))
+          && (group == null || group.equals(registration.getRunGroup()))
           && (eventId == null || eventId.equals("") || eventId.equals(registration.getEventId()))) {
         registrations.add(registration);
       }

@@ -13,31 +13,17 @@ public class ManageDriversServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    PageState pageState = PageState.get(request);
+    request.setAttribute("pageState", pageState);
 
-    // Handle sort order.
-    Property orderBy;
-    try {
-      orderBy = Property.valueOf(request.getParameter("o"));
-    } catch (Exception e) {
-      orderBy = Property.CREATE_DATE;
-    }
-    request.setAttribute("orderBy", orderBy);
-
-    boolean isAscending = "1".equals(request.getParameter("a"));
-    request.setAttribute("isAscending", isAscending);
-
-    String experience = request.getParameter("experience");
-    request.setAttribute("experience", experience);
-
-    boolean onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
-    request.setAttribute("onlyGooglers", onlyGooglers);
-
-    List<Driver> drivers = Driver.findAll(orderBy, isAscending, experience, onlyGooglers);
+    pageState.handleSort(request);
+    List<Driver> drivers = Driver.findAll(pageState.getOrderBy(), pageState.isAscending(), pageState.getExperience(),
+        pageState.isOnlyGooglers());
     request.setAttribute("drivers", drivers);
 
     StringBuilder mailingList = new StringBuilder();
     for (Driver driver : drivers) {
-      mailingList.append(String.format("\"%s\" <%s>, ", driver.getName(), onlyGooglers
+      mailingList.append(String.format("\"%s\" <%s>, ", driver.getName(), pageState.isOnlyGooglers()
           ? driver.getGoogleLdap() + "@google.com"
           : driver.getEmail()));
     }
@@ -52,6 +38,8 @@ public class ManageDriversServlet extends HttpServlet {
       throws ServletException, IOException {
     if ("delete".equals(request.getParameter("action"))) {
       Driver.deleteByIds(request.getParameterValues("delete"));
+    } else if ("filter".equals(request.getParameter("action"))) {
+      PageState.get(request).handleFilter(request);
     }
     doGet(request, response);
   }

@@ -19,7 +19,7 @@
         <select id="experience" name="experience">
           <option value="">All</option>
           <c:forEach items="${requestScope.optionMap[\"EXPERIENCE\"]}" var="experience">
-            <option value="${experience}"<c:if test="${requestScope.experience == experience}"> selected</c:if>>
+            <option value="${experience}"<c:if test="${requestScope.pageState.experience == experience}"> selected</c:if>>
               ${experience} (${experience.label})
             </option>
           </c:forEach>
@@ -28,7 +28,7 @@
       &nbsp;
       <label>
         Only Googlers
-        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.onlyGooglers}">
+        <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.pageState.onlyGooglers}">
                checked</c:if>>
       </label>
     </fieldset>
