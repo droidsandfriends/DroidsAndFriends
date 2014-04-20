@@ -15,6 +15,19 @@
     <input type="hidden" id="action" name="action" value="">
     <fieldset style="text-align: center">
       <label>
+        Membership:
+        <select id="membershipStatus" name="membershipStatus">
+          <option value="">All</option>
+          <c:forEach items="${requestScope.optionMap[\"MEMBERSHIP_STATUS\"]}" var="membershipStatus">
+            <option value="${membershipStatus}"<c:if
+                test="${requestScope.pageState.membershipStatus == membershipStatus}"> selected</c:if>>
+                ${membershipStatus.label}
+            </option>
+          </c:forEach>
+        </select>
+      </label>
+      &nbsp;
+      <label>
         Experience:
         <select id="experience" name="experience">
           <option value="">All</option>
@@ -27,7 +40,7 @@
       </label>
       &nbsp;
       <label>
-        Only Googlers
+        Googlers
         <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.pageState.onlyGooglers}">
                checked</c:if>>
       </label>
@@ -79,22 +92,21 @@
     <textarea cols="80" rows="10">${fn:escapeXml(mailingList)}</textarea>
   </fieldset>
   <script type="text/javascript">
+    function doFilter() {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    }
+
+    $addHandler($('membershipStatus'), 'change', doFilter);
+    $addHandler($('experience'), 'change', doFilter);
+    $addHandler($('onlyGooglers'), 'change', doFilter);
+
     $addHandler($('theForm'), 'submit', function(e) {
       if (e.preventDefault) {
         e.preventDefault();
       } else {
         e.returnValue = false;
       }
-    });
-
-    $addHandler($('experience'), 'change', function () {
-      $('action').value = 'filter';
-      $('theForm').submit();
-    });
-
-    $addHandler($('onlyGooglers'), 'change', function () {
-      $('action').value = 'filter';
-      $('theForm').submit();
     });
 
     $addHandler($('deleteButton'), 'click', function () {

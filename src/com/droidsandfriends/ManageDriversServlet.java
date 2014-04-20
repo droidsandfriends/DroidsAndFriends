@@ -18,7 +18,7 @@ public class ManageDriversServlet extends HttpServlet {
 
     pageState.handleSort(request);
     List<Driver> drivers = Driver.findAll(pageState.getOrderBy(), pageState.isAscending(), pageState.getExperience(),
-        pageState.isOnlyGooglers());
+        pageState.isOnlyGooglers(), pageState.getMembershipStatus());
     request.setAttribute("drivers", drivers);
 
     StringBuilder mailingList = new StringBuilder();

@@ -14,6 +14,7 @@ public class PageState implements Serializable {
   private String eventId;
   private String experience;
   private boolean onlyGooglers;
+  private String membershipStatus;
 
   private PageState() {}
 
@@ -45,12 +46,12 @@ public class PageState implements Serializable {
   }
 
   public void handleFilter(HttpServletRequest request) {
-    String evt = request.getParameter("eventId");
+    String evt = request.getParameter(Property.EVENT_ID.getName());
     if (evt != null) {
       eventId = evt;
     }
 
-    String exp = request.getParameter("experience");
+    String exp = request.getParameter(Property.EXPERIENCE.getName());
     if (exp != null) {
       try {
         experience = Experience.valueOf(exp).toString();
@@ -61,6 +62,15 @@ public class PageState implements Serializable {
 
     String goog = request.getParameter("onlyGooglers");
     onlyGooglers = "on".equals(goog);
+
+    String status = request.getParameter(Property.MEMBERSHIP_STATUS.getName());
+    if (status != null) {
+      try {
+        membershipStatus = MembershipStatus.valueOf(status).toString();
+      } catch (Exception e) {
+        membershipStatus = null;
+      }
+    }
   }
 
   public Property getOrderBy() {
@@ -81,6 +91,10 @@ public class PageState implements Serializable {
 
   public boolean isOnlyGooglers() {
     return onlyGooglers;
+  }
+
+  public MembershipStatus getMembershipStatus() {
+    return membershipStatus == null ? null : MembershipStatus.valueOf(membershipStatus);
   }
 
 }
