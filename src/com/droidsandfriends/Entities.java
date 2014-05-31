@@ -1,8 +1,8 @@
 package com.droidsandfriends;
 
-import java.util.Date;
-
 import com.google.appengine.api.datastore.Entity;
+
+import java.util.Date;
 
 public class Entities {
 
@@ -16,6 +16,15 @@ public class Entities {
   }
 
   public static void setString(Entity entity, Property property, String value) {
+    entity.setProperty(property.getName(), value);
+  }
+
+  public static boolean getBoolean(Entity entity, Property property, boolean defaultValue) {
+    Object value = entity.getProperty(property.getName());
+    return (value == null) ? defaultValue : (Boolean) value;
+  }
+
+  public static void setBoolean(Entity entity, Property property, boolean value) {
     entity.setProperty(property.getName(), value);
   }
 

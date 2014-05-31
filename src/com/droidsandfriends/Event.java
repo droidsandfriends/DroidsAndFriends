@@ -27,11 +27,12 @@ public class Event {
   private long a, b, c, x;
   private long driverPrice, guestPrice;
   private String description;
+  private boolean hidden;
   private Date createDate;
   private Date updateDate;
   
   private Event(String id, Date date, Venue venue, long a, long b, long c, long x, long driverPrice, long guestPrice,
-      String description, Date createDate, Date updateDate) {
+      String description, boolean hidden, Date createDate, Date updateDate) {
     this.id = id;
     this.date = date;
     this.venue = venue;
@@ -42,6 +43,7 @@ public class Event {
     this.driverPrice = driverPrice;
     this.guestPrice = guestPrice;
     this.description = description;
+    this.hidden = hidden;
     this.createDate = createDate;
     this.updateDate = updateDate;
   }
@@ -58,6 +60,7 @@ public class Event {
         Entities.getLong(entity, Property.DRIVER_PRICE, 0),
         Entities.getLong(entity, Property.GUEST_PRICE, 0),
         Entities.getString(entity, Property.DESCRIPTION),
+        Entities.getBoolean(entity, Property.HIDDEN, false),
         Entities.getDate(entity, Property.CREATE_DATE),
         Entities.getDate(entity, Property.UPDATE_DATE));
   }
@@ -118,11 +121,15 @@ public class Event {
   public Date getUpdateDate() {
     return updateDate;
   }
+
+  public boolean isHidden() {
+    return hidden;
+  }
   
   public static Event createNew() {
     Date now = new Date();
     return new Event(null, now, DEFAULT_VENUE, DEFAULT_A, DEFAULT_B, DEFAULT_C, DEFAULT_X, DEFAULT_DRIVER_PRICE,
-        DEFAULT_GUEST_PRICE, null, now, now);
+        DEFAULT_GUEST_PRICE, null, false, now, now);
   }
 
   public static Event findById(String id) {
@@ -160,10 +167,14 @@ public class Event {
   }
 
   public static List<Event> findAll() {
-    return findAll(Property.DATE, true);
+    return findAll(/* onlyVisible */ false);
   }
 
-  public static List<Event> findAll(Property orderBy, boolean isAscending) {
+  public static List<Event> findAll(boolean onlyVisible) {
+    return findAll(Property.DATE, /* isAscending */ true, onlyVisible);
+  }
+
+  public static List<Event> findAll(Property orderBy, boolean isAscending, boolean onlyVisible) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Events", "default");
     Query query = new Query("Event", parentKey).addSort(orderBy.getName(), isAscending 
@@ -173,7 +184,9 @@ public class Event {
     List<Event> events = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Event event = new Event(entity);
-      events.add(event);
+      if (!onlyVisible || !event.isHidden()) {
+        events.add(event);
+      }
     }
     return events;
   }
@@ -209,6 +222,8 @@ public class Event {
     this.driverPrice = Long.parseLong(parameterMap.get(Property.DRIVER_PRICE.getName())[0], 10);
     this.guestPrice = Long.parseLong(parameterMap.get(Property.GUEST_PRICE.getName())[0], 10);
     this.description = parameterMap.get(Property.DESCRIPTION.getName())[0];
+    String[] hiddenParameters = parameterMap.get(Property.HIDDEN.getName());
+    this.hidden = hiddenParameters != null && "on".equals(hiddenParameters[0]);
     this.updateDate = new Date();
 
     return errors;
@@ -243,6 +258,7 @@ public class Event {
         Entities.setLong(entity, Property.DRIVER_PRICE, driverPrice);
         Entities.setLong(entity, Property.GUEST_PRICE, guestPrice);
         Entities.setString(entity, Property.DESCRIPTION, this.description);
+        Entities.setBoolean(entity, Property.HIDDEN, this.hidden);
         Entities.setDate(entity, Property.CREATE_DATE, this.createDate);
         Entities.setDate(entity, Property.UPDATE_DATE, this.updateDate);
 
@@ -333,8 +349,8 @@ public class Event {
   @Override
   public String toString() {
     return String.format("{id: %s, date: %s, venue: %s, a: %d, b: %d, c: %d, x: %d, driverPrice: %d, guestPrice: %d, "
-        + "description: %s, createDate: %s, updateDate: %s}",
-        id, date, venue, a, b, c, x, driverPrice, guestPrice, description, createDate, updateDate);
+        + "description: %s, hidden: %s, createDate: %s, updateDate: %s}",
+        id, date, venue, a, b, c, x, driverPrice, guestPrice, description, hidden, createDate, updateDate);
   }
 
 }

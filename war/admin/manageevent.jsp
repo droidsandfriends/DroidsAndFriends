@@ -24,6 +24,7 @@
         <dnf:numberinput property="DRIVER_PRICE" min="250" max="500" value="${event.driverPrice}"></dnf:numberinput>
         <dnf:numberinput property="GUEST_PRICE" min="25" max="50" value="${event.guestPrice}"></dnf:numberinput>
         <dnf:textareainput property="DESCRIPTION" value="${event.description}" optional="true"/>
+        <dnf:checkboxinput property="HIDDEN" value="${event.hidden}"/>
       </table>
     </form>
     <div class="dnf-button-bar">

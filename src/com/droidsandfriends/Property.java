@@ -34,6 +34,7 @@ public enum Property {
   X("x", "Group X"),
   DRIVER_PRICE("driverPrice", "Driver<br>Price"),
   GUEST_PRICE("guestPrice", "Guest<br>Price"),
+  HIDDEN("hidden", "Hidden"),
   
   // Registration properties
   EVENT_ID("eventId", "Event"),

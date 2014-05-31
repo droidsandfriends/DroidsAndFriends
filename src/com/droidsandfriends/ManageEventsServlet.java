@@ -18,7 +18,7 @@ public class ManageEventsServlet extends HttpServlet {
 
     pageState.handleSort(request);
 
-    List<Event> events = Event.findAll(pageState.getOrderBy(), pageState.isAscending());
+    List<Event> events = Event.findAll(pageState.getOrderBy(), pageState.isAscending(), /* onlyVisible */ false);
     request.setAttribute("events", events);
 
     // Render form.
