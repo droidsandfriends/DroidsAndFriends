@@ -12,6 +12,17 @@
   <dnf:nav current="managetransactions"/>
   <h1>Transactions</h1>
   <form action="managetransactions" autocomplete="on" id="theForm" method="post">
+    <input type="hidden" id="action" name="action" value="">
+    <fieldset style="text-align: center">
+      <label>
+        <input type="checkbox" id="onlyMatching" name="onlyMatching"
+          <c:if test="${requestScope.pageState.onlyMatching}">checked</c:if>>
+        Show only
+      </label>
+      &nbsp;
+      <input id="matchText" name="matchText" type="text" size="40" maxlength="100"
+          value="${fn:escapeXml(requestScope.pageState.matchText)}">
+    </fieldset>
     <table class="dnf-admin">
       <thead>
         <tr>
@@ -31,8 +42,8 @@
             <td><input class="dnf-checkbox" name="delete" type="checkbox" value="${transaction.id}"></td>
             <td><a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a></td>
             <td>${fn:escapeXml(transaction.email)}</td>
-            <td class="dnf-number"><a href="managetransaction?id=${transaction.id}"><fmt:formatNumber value="${transaction.dollarAmount}" type="currency"/></a></td>
-            <td>${fn:escapeXml(transaction.description)}</td>
+            <td class="dnf-number"><a href="https://manage.stripe.com/payments/${transaction.id}"><fmt:formatNumber value="${transaction.dollarAmount}" type="currency"/></a></td>
+            <td><a href="managetransaction?id=${transaction.id}">${fn:escapeXml(transaction.description)}</a></td>
             <td title="${transaction.createDate}"><fmt:formatDate value="${transaction.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${transaction.updateDate}"><fmt:formatDate value="${transaction.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
@@ -47,6 +58,13 @@
     <button class="dnf-delete-button" id="deleteButton">Delete</button>
   </div>
   <script type="text/javascript">
+    function doFilter() {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    }
+
+    $addHandler($('onlyMatching'), 'change', doFilter);
+
     $addHandler($('theForm'), 'submit', function(e) {
       if (e.preventDefault) {
         e.preventDefault();
@@ -57,6 +75,7 @@
 
     $addHandler($('deleteButton'), 'click', function(e) {
       if (confirm("Are you sure?")) {
+        $('action').value = 'delete';
         $('theForm').submit();
       }
     });

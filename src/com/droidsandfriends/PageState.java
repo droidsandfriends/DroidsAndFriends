@@ -15,6 +15,8 @@ public class PageState implements Serializable {
   private String experience;
   private boolean onlyGooglers;
   private String membershipStatus;
+  private boolean onlyMatching;
+  private String matchText;
 
   private PageState() {}
 
@@ -60,8 +62,7 @@ public class PageState implements Serializable {
       }
     }
 
-    String goog = request.getParameter("onlyGooglers");
-    onlyGooglers = "on".equals(goog);
+    onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
 
     String status = request.getParameter(Property.MEMBERSHIP_STATUS.getName());
     if (status != null) {
@@ -71,6 +72,9 @@ public class PageState implements Serializable {
         membershipStatus = null;
       }
     }
+
+    onlyMatching = "on".equals(request.getParameter("onlyMatching"));
+    matchText = request.getParameter("matchText");
   }
 
   public Property getOrderBy() {
@@ -95,6 +99,14 @@ public class PageState implements Serializable {
 
   public MembershipStatus getMembershipStatus() {
     return membershipStatus == null ? null : MembershipStatus.valueOf(membershipStatus);
+  }
+
+  public boolean isOnlyMatching() {
+    return onlyMatching;
+  }
+
+  public String getMatchText() {
+    return matchText;
   }
 
 }

@@ -19,7 +19,9 @@
       <a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a>
     </dnf:textinput>
     <dnf:textinput property="AMOUNT" value="${dollarAmount}" optional="true" readonly="true"/>
-    <dnf:textinput property="DESCRIPTION" value="${transaction.description}" optional="true" readonly="true"/>
+    <dnf:textinput property="DESCRIPTION" value="${transaction.description}" optional="true" readonly="true">
+      <a href="https://manage.stripe.com/payments/${transaction.id}">${transaction.id}</a>
+    </dnf:textinput>
   </table>
   <div class="dnf-button-bar">
     <a href="managetransactions">

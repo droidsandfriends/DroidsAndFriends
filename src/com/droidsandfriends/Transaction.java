@@ -1,21 +1,12 @@
 package com.droidsandfriends;
 
+import com.google.appengine.api.datastore.*;
+
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.DatastoreTimeoutException;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.TransactionOptions;
 
 // TODO: Rename to "Payment"
 public class Transaction {
@@ -124,10 +115,11 @@ public class Transaction {
   }
   
   public static List<Transaction> findAll() {
-    return findAll(Property.CREATE_DATE, true);
+    return findAll(Property.CREATE_DATE, true, /* onlyMatching */ false, /* matchText */ null);
   }
 
-  public static List<Transaction> findAll(Property orderBy, boolean isAscending) {
+  public static List<Transaction> findAll(Property orderBy, boolean isAscending,
+                                          boolean onlyMatching, String matchText) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Transactions", "default");
     Query query = new Query("Transaction", parentKey).addSort(orderBy.getName(), isAscending 
@@ -137,9 +129,20 @@ public class Transaction {
     List<Transaction> transactions = new ArrayList<Transaction>(entities.size());
     for (Entity entity : entities) {
       Transaction transaction = new Transaction(entity);
-      transactions.add(transaction);
+      if (!onlyMatching || transaction.matches(matchText)) {
+        transactions.add(transaction);
+      }
     }
     return transactions;
+  }
+
+  public boolean matches(String matchText) {
+    // Everything matches the null/empty string.
+    if (matchText == null || matchText.trim().length() == 0) {
+      return true;
+    }
+
+    return name.contains(matchText) || email.contains(matchText) || description.contains(matchText);
   }
 
   public static void deleteByIds(String[] ids) {

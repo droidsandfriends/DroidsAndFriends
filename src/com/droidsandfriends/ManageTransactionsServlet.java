@@ -17,7 +17,8 @@ public class ManageTransactionsServlet extends HttpServlet {
 
     pageState.handleSort(request);
 
-    request.setAttribute("transactions", Transaction.findAll(pageState.getOrderBy(), pageState.isAscending()));
+    request.setAttribute("transactions", Transaction.findAll(pageState.getOrderBy(), pageState.isAscending(),
+        pageState.isOnlyMatching(), pageState.getMatchText()));
    
     // Render form.
     request.getRequestDispatcher("managetransactions.jsp").forward(request, response);
@@ -26,7 +27,11 @@ public class ManageTransactionsServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    Transaction.deleteByIds(request.getParameterValues("delete"));
+    if ("delete".equals(request.getParameter("action"))) {
+      Transaction.deleteByIds(request.getParameterValues("delete"));
+    } else if ("filter".equals(request.getParameter("action"))) {
+      PageState.get(request).handleFilter(request);
+    }
     doGet(request, response);
   }
 
