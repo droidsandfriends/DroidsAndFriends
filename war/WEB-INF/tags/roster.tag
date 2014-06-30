@@ -41,7 +41,11 @@
           </tr>
         </c:if>
       </c:forEach>
-      <tr><td class="dnf-roster-footer" colspan="2">&nbsp;</td></tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <td class="dnf-roster-footer" colspan="2">&nbsp;</td>
+      </tr>
+    </tfoot>
   </table>
 </div>

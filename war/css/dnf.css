@@ -315,7 +315,11 @@ td.dnf-event-footer {
   white-space: nowrap;
 }
 
-td.dnf-roster-footer {
+.dnf-roster thead td {
+  background-color: #000;
+}
+
+.dnf-roster tfoot td {
   background-color: #000;
   border: 1px solid #333;
   border-radius: 0 0 1em 1em;

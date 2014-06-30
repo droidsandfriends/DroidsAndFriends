@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,15 +57,48 @@ public class EventServlet extends HttpServlet {
         return;
       }
 
+      // TODO: Formalize venue-specific pricing & budget.
+      boolean isFiveMile = Venue.TH5.equals(event.getVenue());
+
       List<Registration> registrations = Registration.findAllByEventId(id);
       String userId = (String) request.getAttribute("userId");
       boolean alreadyRegistered = false;
+      int instructorCount = 0, driverCount = 0, guestCount = 0, flaggerCount = isFiveMile ? 14 : 7;
       for (Registration registration : registrations) {
+        if (Experience.X.equals(registration.getRunGroup())) {
+          instructorCount++;
+        } else {
+          driverCount++;
+        }
+        guestCount += registration.getGuestCount();
         if (userId.equals(registration.getUserId())) {
           alreadyRegistered = true;
           break;
         }
       }
+
+      List<LineItem> expenses = new ArrayList<>();
+      expenses.add(new LineItem("Track rental", (isFiveMile ? 8000 : 4500) * 100, 1));
+      expenses.add(new LineItem("Insurance", 1275 * 100, 1));
+      expenses.add(new LineItem("ALS ambulance (per hour)", (isFiveMile ? 220 : 155) * 100, 8));
+      expenses.add(new LineItem("Event control", 250 * 100, 1));
+      expenses.add(new LineItem("Flaggers", 135 * 100, flaggerCount));
+      expenses.add(new LineItem("Communications service", 250 * 100, 1));
+      expenses.add(new LineItem("PA system", 325 * 100, 1));
+      expenses.add(new LineItem("Radio rental", 30 * 100, 1));
+      expenses.add(new LineItem("Tow standby ($600 if used)", 175 * 100, 1));
+      expenses.add(new LineItem("Fire/emergency standby ($600 if used)", 175 * 100, 1));
+      expenses.add(new LineItem("Sanitary service", 250 * 100, 1));
+      expenses.add(new LineItem("Electrical service", 150 * 100, 1));
+      expenses.add(new LineItem("Photography", 1500 * 100, 1));
+      expenses.add(new LineItem("Instructors", 53 * 100, instructorCount));
+      expenses.add(new LineItem("Catering", 28 * 100, (flaggerCount + instructorCount + driverCount + guestCount + 2)));
+      request.setAttribute("expenses", expenses);
+
+      List<LineItem> incomes = new ArrayList<>();
+      incomes.add(new LineItem("Driver registrations (after fees)", (isFiveMile ? 38810 : 33955), driverCount));
+      incomes.add(new LineItem("Guest registrations (after fees)", 2883, guestCount));
+      request.setAttribute("incomes", incomes);
 
       request.setAttribute("alreadyRegistered", alreadyRegistered);
       request.setAttribute("event", event);
