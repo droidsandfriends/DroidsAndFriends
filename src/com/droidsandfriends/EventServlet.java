@@ -71,9 +71,8 @@ public class EventServlet extends HttpServlet {
           driverCount++;
         }
         guestCount += registration.getGuestCount();
-        if (userId.equals(registration.getUserId())) {
+        if (!alreadyRegistered && userId.equals(registration.getUserId())) {
           alreadyRegistered = true;
-          break;
         }
       }
 
