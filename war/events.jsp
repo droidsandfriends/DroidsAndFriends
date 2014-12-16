@@ -10,9 +10,9 @@
 </head>
 <body>
   <dnf:nav current="events"/>
-  <h1>2014 Calendar</h1>
+  <h1>2015 Calendar</h1>
   <c:choose>
-    <c:when test="${empty events}"><h3><i>No events</i></h3></c:when>
+    <c:when test="${empty events}"><h3><i>Coming soon!</i></h3></c:when>
     <c:when test="${fn:length(events) == 1}"><h3><i>1 event</i></h3></c:when>
     <c:otherwise><h3><i>${fn:length(events)} events</i></h3></c:otherwise>
   </c:choose>
