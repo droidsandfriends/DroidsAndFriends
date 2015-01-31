@@ -18,7 +18,7 @@ public class Event {
   private static final long DEFAULT_C = 15;
   private static final long DEFAULT_X = 20;
   
-  private static final long DEFAULT_DRIVER_PRICE = 350;
+  private static final long DEFAULT_DRIVER_PRICE = 330;
   private static final long DEFAULT_GUEST_PRICE = 30;
 
   private String id; // Datastore entity name; generated based on the event date
