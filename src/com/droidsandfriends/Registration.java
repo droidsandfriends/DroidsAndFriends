@@ -175,6 +175,18 @@ public class Registration {
     return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null, /* onlyGooglers */ false);
   }
 
+  public static List<Registration> findAllByUserId(String userId) {
+    List<Registration> allRegistrations = findAll();
+    List<Registration> registrations = new ArrayList<>();
+    for (Registration registration : allRegistrations) {
+      // In-memory filtering, because DataStore indexes are a pain
+      if (userId.equals(registration.getUserId())) {
+        registrations.add(registration);
+      }
+    }
+    return registrations;
+  }
+
   public static List<Registration> findAll(Property orderBy, boolean isAscending) {
     return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null, /* onlyGooglers */ false);
   }

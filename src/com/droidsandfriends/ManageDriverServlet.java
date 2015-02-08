@@ -31,6 +31,10 @@ public class ManageDriverServlet extends HttpServlet {
     // If the driver has no Google LDAP, guess
     driver.guessGoogleLdap();
 
+    // List all registrations for this driver
+    List<Registration> registrations = Registration.findAllByUserId(id);
+    request.setAttribute("registrations", registrations);
+
     // Render form
     request.setAttribute("driver", driver);
     request.getRequestDispatcher("managedriver.jsp").forward(request, response);

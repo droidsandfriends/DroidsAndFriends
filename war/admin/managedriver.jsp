@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="dnf" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <dnf:html/>
@@ -31,6 +32,32 @@
         <c:if test="${not empty driver.customerId}">
           <dnf:textinput property="CUSTOMER_ID" value="${driver.customerId}" optional="true" readonly="true"/>
         </c:if>
+      </table>
+      <table class="dnf-admin">
+        <thead>
+        <tr>
+          <th title="Registration">Reg</th>
+          <th>Date</th>
+          <th>Group</th>
+          <th>Guest(s)</th>
+          <th title="Transaction">Txn</th>
+        </tr>
+        </thead>
+        <tbody>
+        <fmt:setLocale value="en_US"/>
+        <c:forEach items="${requestScope.registrations}" var="registration">
+          <tr>
+            <td><a href="manageregistration?id=${registration.id}" title="${registration.id}">Edit</a></td>
+            <td><a href="manageevent?id=${registration.eventId}"><fmt:formatDate value="${registration.date}" pattern="MMMM d, yyyy"/></a></td>
+            <td class="dnf-group-${registration.runGroup}">${registration.runGroup}</td>
+            <td class="dnf-number">${registration.guestCount}</td>
+            <td><a href="managetransaction?id=${registration.transactionId}" title="${registration.transactionId}">View</a></td>
+          </tr>
+        </c:forEach>
+        <tr>
+          <td class="dnf-admin-footer" colspan="5">${fn:length(requestScope.registrations)} registrations</td>
+        </tr>
+        </tbody>
       </table>
     </form>
     <div class="dnf-button-bar">
