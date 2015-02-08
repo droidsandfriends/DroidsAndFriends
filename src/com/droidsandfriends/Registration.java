@@ -188,7 +188,8 @@ public class Registration {
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
 
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
+    // TODO: Should really use a datastore index for server-side filtering
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
     List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
