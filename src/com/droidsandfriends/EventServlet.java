@@ -77,24 +77,30 @@ public class EventServlet extends HttpServlet {
       }
 
       List<LineItem> expenses = new ArrayList<>();
+
+      // Thunderhill fixed costs
       expenses.add(new LineItem("Track rental", (isFiveMile ? 8000 : 4500) * 100, 1));
-      expenses.add(new LineItem("Skid pad rental", 400 * 100, 1));
       expenses.add(new LineItem("Insurance", 1275 * 100, 1));
       expenses.add(new LineItem("ALS ambulance (per hour)", (isFiveMile ? 220 : 155) * 100, 8));
-      expenses.add(new LineItem("Event control", 250 * 100, 1));
-      expenses.add(new LineItem("Flaggers", 135 * 100, flaggerCount));
-      expenses.add(new LineItem("Communications line", 250 * 100, (isFiveMile ? 2 : 1)));
+      expenses.add(new LineItem("Gate guard", 240 * 100, 1));
+      expenses.add(new LineItem("Communications line", 500 * 100, (isFiveMile ? 2 : 1)));
       expenses.add(new LineItem("PA system", 400 * 100, 1));
       expenses.add(new LineItem("Radio rental", 40 * 100, 1));
-      expenses.add(new LineItem("Gate guard", 240 * 100, 1));
       expenses.add(new LineItem("Tow standby ($700 if used)", 100 * 100, 1));
       expenses.add(new LineItem("Fire/emergency standby ($700 if used)", 100 * 100, 1));
-      expenses.add(new LineItem("Sanitary service", 295 * 100, 1));
       expenses.add(new LineItem("Electrical service", 175 * 100, 1));
-      expenses.add(new LineItem("Tire service", 150 * 100, 1));
+      expenses.add(new LineItem("Flaggers", 135 * 100, flaggerCount));
+      expenses.add(new LineItem("Event control", 250 * 100, 1));
+      expenses.add(new LineItem("Skid pad rental", 400 * 100, 1));
+      expenses.add(new LineItem("Sanitary service", 295 * 100, 1));
+
+      // External fixed costs
       expenses.add(new LineItem("Photography", (isFiveMile ? 2000 : 1500) * 100, 1));
+
+      // Variable costs
       expenses.add(new LineItem("Instructors", 53 * 100, instructorCount));
       expenses.add(new LineItem("Catering", 28 * 100, (flaggerCount + instructorCount + driverCount + guestCount + 2)));
+
       request.setAttribute("expenses", expenses);
 
       List<LineItem> incomes = new ArrayList<>();
