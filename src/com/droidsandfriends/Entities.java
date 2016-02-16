@@ -19,6 +19,10 @@ public class Entities {
     entity.setProperty(property.getName(), value);
   }
 
+  public static boolean getBoolean(Entity entity, Property property) {
+    return getBoolean(entity, property, false);
+  }
+
   public static boolean getBoolean(Entity entity, Property property, boolean defaultValue) {
     Object value = entity.getProperty(property.getName());
     return (value == null) ? defaultValue : (Boolean) value;

@@ -25,14 +25,19 @@ public class Event {
   private Date date;
   private Venue venue;
   private long a, b, c, x;
-  private long driverPrice, guestPrice;
+  private long driverPrice, guestPrice, instructorPrice, cateringPrice, trackRental, skidPadRental, insuranceFee,
+      ambulanceFee, controlFee, flaggersFee, communicationsFee, paFee, radiosFee, guardFee, towFee, fireFee,
+      sanitaryFee, electricalFee, photoFee;
   private String description;
   private boolean hidden;
   private Date createDate;
   private Date updateDate;
   
   private Event(String id, Date date, Venue venue, long a, long b, long c, long x, long driverPrice, long guestPrice,
-      String description, boolean hidden, Date createDate, Date updateDate) {
+                long instructorPrice, long cateringPrice, long trackRental, long skidPadRental, long insuranceFee,
+                long ambulanceFee, long controlFee, long flaggersFee, long communicationsFee, long paFee,
+                long radiosFee, long guardFee, long towFee, long fireFee, long sanitaryFee, long electricalFee,
+                long photoFee, String description, boolean hidden, Date createDate, Date updateDate) {
     this.id = id;
     this.date = date;
     this.venue = venue;
@@ -42,6 +47,23 @@ public class Event {
     this.x = x;
     this.driverPrice = driverPrice;
     this.guestPrice = guestPrice;
+    this.instructorPrice = instructorPrice;
+    this.cateringPrice = cateringPrice;
+    this.trackRental = trackRental;
+    this.skidPadRental = skidPadRental;
+    this.insuranceFee = insuranceFee;
+    this.ambulanceFee = ambulanceFee;
+    this.controlFee = controlFee;
+    this.flaggersFee = flaggersFee;
+    this.communicationsFee= communicationsFee;
+    this.paFee = paFee;
+    this.radiosFee = radiosFee;
+    this.guardFee = guardFee;
+    this.towFee = towFee;
+    this.fireFee = fireFee;
+    this.sanitaryFee = sanitaryFee;
+    this.electricalFee = electricalFee;
+    this.photoFee = photoFee;
     this.description = description;
     this.hidden = hidden;
     this.createDate = createDate;
@@ -53,14 +75,31 @@ public class Event {
         Entities.getString(entity, Property.ID),
         Entities.getDate(entity, Property.DATE),
         Entities.getVenue(entity, Property.VENUE),
-        Entities.getLong(entity, Property.A, 0),
-        Entities.getLong(entity, Property.B, 0),
-        Entities.getLong(entity, Property.C, 0),
-        Entities.getLong(entity, Property.X, 0),
-        Entities.getLong(entity, Property.DRIVER_PRICE, 0),
-        Entities.getLong(entity, Property.GUEST_PRICE, 0),
+        Entities.getLong(entity, Property.A),
+        Entities.getLong(entity, Property.B),
+        Entities.getLong(entity, Property.C),
+        Entities.getLong(entity, Property.X),
+        Entities.getLong(entity, Property.DRIVER_PRICE),
+        Entities.getLong(entity, Property.GUEST_PRICE),
+        Entities.getLong(entity, Property.INSTRUCTOR_PRICE),
+        Entities.getLong(entity, Property.CATERING_PRICE),
+        Entities.getLong(entity, Property.TRACK_RENTAL),
+        Entities.getLong(entity, Property.SKID_PAD_RENTAL),
+        Entities.getLong(entity, Property.INSURANCE_FEE),
+        Entities.getLong(entity, Property.AMBULANCE_FEE),
+        Entities.getLong(entity, Property.CONTROL_FEE),
+        Entities.getLong(entity, Property.FLAGGERS_FEE),
+        Entities.getLong(entity, Property.COMMUNICATIONS_FEE),
+        Entities.getLong(entity, Property.PA_FEE),
+        Entities.getLong(entity, Property.RADIOS_FEE),
+        Entities.getLong(entity, Property.GUARD_FEE),
+        Entities.getLong(entity, Property.TOW_FEE),
+        Entities.getLong(entity, Property.FIRE_FEE),
+        Entities.getLong(entity, Property.SANITARY_FEE),
+        Entities.getLong(entity, Property.ELECTRICAL_FEE),
+        Entities.getLong(entity, Property.PHOTO_FEE),
         Entities.getString(entity, Property.DESCRIPTION),
-        Entities.getBoolean(entity, Property.HIDDEN, false),
+        Entities.getBoolean(entity, Property.HIDDEN),
         Entities.getDate(entity, Property.CREATE_DATE),
         Entities.getDate(entity, Property.UPDATE_DATE));
   }
@@ -109,7 +148,75 @@ public class Event {
   public long getGuestPrice() {
     return guestPrice;
   }
-  
+
+  public long getInstructorPrice() {
+    return instructorPrice;
+  }
+
+  public long getCateringPrice() {
+    return cateringPrice;
+  }
+
+  public long getTrackRental() {
+    return trackRental;
+  }
+
+  public long getSkidPadRental() {
+    return skidPadRental;
+  }
+
+  public long getInsuranceFee() {
+    return insuranceFee;
+  }
+
+  public long getAmbulanceFee() {
+    return ambulanceFee;
+  }
+
+  public long getControlFee() {
+    return controlFee;
+  }
+
+  public long getFlaggersFee() {
+    return flaggersFee;
+  }
+
+  public long getCommunicationsFee() {
+    return communicationsFee;
+  }
+
+  public long getPaFee() {
+    return paFee;
+  }
+
+  public long getRadiosFee() {
+    return radiosFee;
+  }
+
+  public long getGuardFee() {
+    return guardFee;
+  }
+
+  public long getTowFee() {
+    return towFee;
+  }
+
+  public long getFireFee() {
+    return fireFee;
+  }
+
+  public long getSanitaryFee() {
+    return sanitaryFee;
+  }
+
+  public long getElectricalFee() {
+    return electricalFee;
+  }
+
+  public long getPhotoFee() {
+    return photoFee;
+  }
+
   public String getDescription() {
     return description;
   }
@@ -127,9 +234,41 @@ public class Event {
   }
   
   public static Event createNew() {
-    Date now = new Date();
-    return new Event(null, now, DEFAULT_VENUE, DEFAULT_A, DEFAULT_B, DEFAULT_C, DEFAULT_X, DEFAULT_DRIVER_PRICE,
-        DEFAULT_GUEST_PRICE, null, false, now, now);
+    final Date date = new Date();
+    final Venue venue = DEFAULT_VENUE;
+    final Map<Property,Long> defaults = getDefaults(date, venue);
+    return new Event(
+        null /* id */,
+        date /* date */,
+        venue /* venue */,
+        defaults.get(Property.A),
+        defaults.get(Property.B),
+        defaults.get(Property.C),
+        defaults.get(Property.X),
+        defaults.get(Property.DRIVER_PRICE),
+        defaults.get(Property.GUEST_PRICE),
+        defaults.get(Property.INSTRUCTOR_PRICE),
+        defaults.get(Property.CATERING_PRICE),
+        defaults.get(Property.TRACK_RENTAL),
+        defaults.get(Property.SKID_PAD_RENTAL),
+        defaults.get(Property.INSURANCE_FEE),
+        defaults.get(Property.AMBULANCE_FEE),
+        defaults.get(Property.CONTROL_FEE),
+        defaults.get(Property.FLAGGERS_FEE),
+        defaults.get(Property.COMMUNICATIONS_FEE),
+        defaults.get(Property.PA_FEE),
+        defaults.get(Property.RADIOS_FEE),
+        defaults.get(Property.GUARD_FEE),
+        defaults.get(Property.TOW_FEE),
+        defaults.get(Property.FIRE_FEE),
+        defaults.get(Property.SANITARY_FEE),
+        defaults.get(Property.ELECTRICAL_FEE),
+        defaults.get(Property.PHOTO_FEE),
+        null /* description */,
+        false /* hidden */,
+        date /* createDate */,
+        date /* updateDate */
+    );
   }
 
   public static Event findById(String id) {
@@ -164,6 +303,11 @@ public class Event {
   static String getIdFromDate(Date date) {
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
     return dateFormat.format(date);
+  }
+
+  static long getYearFromDate(Date date) {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy");
+    return Long.parseLong(dateFormat.format(date), 10);
   }
 
   public static List<Event> findAll() {
@@ -221,6 +365,23 @@ public class Event {
     this.x = Long.parseLong(parameterMap.get(Property.X.getName())[0], 10);
     this.driverPrice = Long.parseLong(parameterMap.get(Property.DRIVER_PRICE.getName())[0], 10);
     this.guestPrice = Long.parseLong(parameterMap.get(Property.GUEST_PRICE.getName())[0], 10);
+    this.instructorPrice = Long.parseLong(parameterMap.get(Property.INSTRUCTOR_PRICE.getName())[0], 10);
+    this.cateringPrice = Long.parseLong(parameterMap.get(Property.CATERING_PRICE.getName())[0], 10);
+    this.trackRental = Long.parseLong(parameterMap.get(Property.TRACK_RENTAL.getName())[0], 10);
+    this.skidPadRental = Long.parseLong(parameterMap.get(Property.SKID_PAD_RENTAL.getName())[0], 10);
+    this.insuranceFee = Long.parseLong(parameterMap.get(Property.INSURANCE_FEE.getName())[0], 10);
+    this.ambulanceFee = Long.parseLong(parameterMap.get(Property.AMBULANCE_FEE.getName())[0], 10);
+    this.controlFee = Long.parseLong(parameterMap.get(Property.CONTROL_FEE.getName())[0], 10);
+    this.flaggersFee = Long.parseLong(parameterMap.get(Property.FLAGGERS_FEE.getName())[0], 10);
+    this.communicationsFee = Long.parseLong(parameterMap.get(Property.COMMUNICATIONS_FEE.getName())[0], 10);
+    this.paFee = Long.parseLong(parameterMap.get(Property.PA_FEE.getName())[0], 10);
+    this.radiosFee = Long.parseLong(parameterMap.get(Property.RADIOS_FEE.getName())[0], 10);
+    this.guardFee = Long.parseLong(parameterMap.get(Property.GUARD_FEE.getName())[0], 10);
+    this.towFee = Long.parseLong(parameterMap.get(Property.TOW_FEE.getName())[0], 10);
+    this.fireFee = Long.parseLong(parameterMap.get(Property.FIRE_FEE.getName())[0], 10);
+    this.sanitaryFee = Long.parseLong(parameterMap.get(Property.SANITARY_FEE.getName())[0], 10);
+    this.electricalFee = Long.parseLong(parameterMap.get(Property.ELECTRICAL_FEE.getName())[0], 10);
+    this.photoFee = Long.parseLong(parameterMap.get(Property.PHOTO_FEE.getName())[0], 10);
     this.description = parameterMap.get(Property.DESCRIPTION.getName())[0];
     String[] hiddenParameters = parameterMap.get(Property.HIDDEN.getName());
     this.hidden = hiddenParameters != null && "on".equals(hiddenParameters[0]);
@@ -255,8 +416,25 @@ public class Event {
         Entities.setLong(entity, Property.B, this.b);
         Entities.setLong(entity, Property.C, this.c);
         Entities.setLong(entity, Property.X, this.x);
-        Entities.setLong(entity, Property.DRIVER_PRICE, driverPrice);
-        Entities.setLong(entity, Property.GUEST_PRICE, guestPrice);
+        Entities.setLong(entity, Property.DRIVER_PRICE, this.driverPrice);
+        Entities.setLong(entity, Property.GUEST_PRICE, this.guestPrice);
+        Entities.setLong(entity, Property.INSTRUCTOR_PRICE, this.instructorPrice);
+        Entities.setLong(entity, Property.CATERING_PRICE, this.cateringPrice);
+        Entities.setLong(entity, Property.TRACK_RENTAL, this.trackRental);
+        Entities.setLong(entity, Property.SKID_PAD_RENTAL, this.skidPadRental);
+        Entities.setLong(entity, Property.INSURANCE_FEE, this.insuranceFee);
+        Entities.setLong(entity, Property.AMBULANCE_FEE, this.ambulanceFee);
+        Entities.setLong(entity, Property.CONTROL_FEE, this.controlFee);
+        Entities.setLong(entity, Property.FLAGGERS_FEE, this.flaggersFee);
+        Entities.setLong(entity, Property.COMMUNICATIONS_FEE, this.communicationsFee);
+        Entities.setLong(entity, Property.PA_FEE, this.paFee);
+        Entities.setLong(entity, Property.RADIOS_FEE, this.radiosFee);
+        Entities.setLong(entity, Property.GUARD_FEE, this.guardFee);
+        Entities.setLong(entity, Property.TOW_FEE, this.towFee);
+        Entities.setLong(entity, Property.FIRE_FEE, this.fireFee);
+        Entities.setLong(entity, Property.SANITARY_FEE, this.sanitaryFee);
+        Entities.setLong(entity, Property.ELECTRICAL_FEE, this.electricalFee);
+        Entities.setLong(entity, Property.PHOTO_FEE, this.photoFee);
         Entities.setString(entity, Property.DESCRIPTION, this.description);
         Entities.setBoolean(entity, Property.HIDDEN, this.hidden);
         Entities.setDate(entity, Property.CREATE_DATE, this.createDate);
@@ -344,6 +522,67 @@ public class Event {
     }
 
     return success;
+  }
+
+  // Returns event defaults; prices are in dollars.
+  private static Map<Property,Long> getDefaults(Date date, Venue venue) {
+    Map<Property,Long> defaults = new HashMap<Property,Long>(20);
+
+    long year = getYearFromDate(date);
+    boolean isFiveMile = Venue.TH5.equals(venue);
+    if (year >= 2016) {
+      // 2016 (current) budget & defaults
+      defaults.put(Property.A, isFiveMile ? 20L : 16L);
+      defaults.put(Property.B, isFiveMile ? 24L : 20L);
+      defaults.put(Property.C, isFiveMile ? 14L : 12L);
+      defaults.put(Property.X, isFiveMile ? 10L : 8L);
+      defaults.put(Property.DRIVER_PRICE, isFiveMile ? 330L : 290L);
+      defaults.put(Property.GUEST_PRICE, 30L);
+      defaults.put(Property.INSTRUCTOR_PRICE, 50L);
+      defaults.put(Property.CATERING_PRICE, 28L);
+      defaults.put(Property.TRACK_RENTAL, isFiveMile ? 7000L : 5500L);
+      defaults.put(Property.SKID_PAD_RENTAL, 400L);
+      defaults.put(Property.INSURANCE_FEE, 1300L);
+      defaults.put(Property.AMBULANCE_FEE, isFiveMile ? 1760L : 1240L);
+      defaults.put(Property.CONTROL_FEE, 250L);
+      defaults.put(Property.FLAGGERS_FEE, isFiveMile ? 1890L : 945L);
+      defaults.put(Property.COMMUNICATIONS_FEE, isFiveMile ? 1000L : 500L);
+      defaults.put(Property.PA_FEE, 400L);
+      defaults.put(Property.RADIOS_FEE, 40L);
+      defaults.put(Property.GUARD_FEE, 30L);
+      defaults.put(Property.TOW_FEE, 150L);
+      defaults.put(Property.FIRE_FEE, 150L);
+      defaults.put(Property.SANITARY_FEE, 295L);
+      defaults.put(Property.ELECTRICAL_FEE, 175L);
+      defaults.put(Property.PHOTO_FEE, 250L);
+    } else {
+      // Legacy budget & defaults
+      defaults.put(Property.A, isFiveMile ? 20L : 15L);
+      defaults.put(Property.B, isFiveMile ? 25L : 20L);
+      defaults.put(Property.C, isFiveMile ? 15L : 15L);
+      defaults.put(Property.X, isFiveMile ? 25L : 20L);
+      defaults.put(Property.DRIVER_PRICE, isFiveMile ? 390L : 330L);
+      defaults.put(Property.GUEST_PRICE, 30L);
+      defaults.put(Property.INSTRUCTOR_PRICE, 50L);
+      defaults.put(Property.CATERING_PRICE, 28L);
+      defaults.put(Property.TRACK_RENTAL, isFiveMile ? 8000L : 4500L);
+      defaults.put(Property.SKID_PAD_RENTAL, 400L);
+      defaults.put(Property.INSURANCE_FEE, 1275L);
+      defaults.put(Property.AMBULANCE_FEE, isFiveMile ? 1760L : 1240L);
+      defaults.put(Property.CONTROL_FEE, 250L);
+      defaults.put(Property.FLAGGERS_FEE, isFiveMile ? 1890L : 945L);
+      defaults.put(Property.COMMUNICATIONS_FEE, isFiveMile ? 500L : 250L);
+      defaults.put(Property.PA_FEE, 400L);
+      defaults.put(Property.RADIOS_FEE, 40L);
+      defaults.put(Property.GUARD_FEE, 30L);
+      defaults.put(Property.TOW_FEE, 100L);
+      defaults.put(Property.FIRE_FEE, 100L);
+      defaults.put(Property.SANITARY_FEE, 295L);
+      defaults.put(Property.ELECTRICAL_FEE, 175L);
+      defaults.put(Property.PHOTO_FEE, isFiveMile ? 2000L : 1500L);
+    }
+
+    return defaults;
   }
 
   @Override

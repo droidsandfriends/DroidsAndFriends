@@ -21,8 +21,25 @@
         <dnf:numberinput property="B" min="0" max="30" value="${event.b}">available</dnf:numberinput>
         <dnf:numberinput property="C" min="0" max="30" value="${event.c}">available</dnf:numberinput>
         <dnf:numberinput property="X" min="0" max="30" value="${event.x}">available</dnf:numberinput>
-        <dnf:numberinput property="DRIVER_PRICE" min="250" max="500" value="${event.driverPrice}"></dnf:numberinput>
-        <dnf:numberinput property="GUEST_PRICE" min="25" max="50" value="${event.guestPrice}"></dnf:numberinput>
+        <dnf:numberinput property="DRIVER_PRICE" min="1" max="10000" value="${event.driverPrice}"/>
+        <dnf:numberinput property="GUEST_PRICE" min="1" max="10000" value="${event.guestPrice}"/>
+        <dnf:numberinput property="INSTRUCTOR_PRICE" min="1" max="10000" value="${event.instructorPrice}"/>
+        <dnf:numberinput property="CATERING_PRICE" min="1" max="10000" value="${event.cateringPrice}"/>
+        <dnf:numberinput property="TRACK_RENTAL" min="1" max="10000" value="${event.trackRental}"/>
+        <dnf:numberinput property="SKID_PAD_RENTAL" min="1" max="10000" value="${event.skidPadRental}"/>
+        <dnf:numberinput property="INSURANCE_FEE" min="1" max="10000" value="${event.insuranceFee}"/>
+        <dnf:numberinput property="AMBULANCE_FEE" min="1" max="10000" value="${event.ambulanceFee}"/>
+        <dnf:numberinput property="CONTROL_FEE" min="1" max="10000" value="${event.controlFee}"/>
+        <dnf:numberinput property="FLAGGERS_FEE" min="1" max="10000" value="${event.flaggersFee}"/>
+        <dnf:numberinput property="COMMUNICATIONS_FEE" min="1" max="10000" value="${event.communicationsFee}"/>
+        <dnf:numberinput property="PA_FEE" min="1" max="10000" value="${event.paFee}"/>
+        <dnf:numberinput property="RADIOS_FEE" min="1" max="10000" value="${event.radiosFee}"/>
+        <dnf:numberinput property="GUARD_FEE" min="1" max="10000" value="${event.guardFee}"/>
+        <dnf:numberinput property="TOW_FEE" min="1" max="10000" value="${event.towFee}"/>
+        <dnf:numberinput property="FIRE_FEE" min="1" max="10000" value="${event.fireFee}"/>
+        <dnf:numberinput property="SANITARY_FEE" min="1" max="10000" value="${event.sanitaryFee}"/>
+        <dnf:numberinput property="ELECTRICAL_FEE" min="1" max="10000" value="${event.electricalFee}"/>
+        <dnf:numberinput property="PHOTO_FEE" min="1" max="10000" value="${event.photoFee}"/>
         <dnf:textareainput property="DESCRIPTION" value="${event.description}" optional="true"/>
         <dnf:checkboxinput property="HIDDEN" value="${event.hidden}"/>
       </table>
