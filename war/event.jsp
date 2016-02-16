@@ -19,6 +19,7 @@
     <c:choose>
       <c:when test="${requestScope.alreadyRegistered}">You are registered for this event.</c:when>
       <c:when test="${event.soldOut}">Sorry, this event is sold out.</c:when>
+      <c:when test="${event.hidden}">Registration for this event is closed.</c:when>
       <c:otherwise>
         <form action="order" autocomplete="on" id="orderForm" method="post">
           <table>
