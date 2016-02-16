@@ -19,7 +19,7 @@
   <div style="text-align:center">
     <c:forEach items="${events}" var="event">
       <fmt:formatDate pattern="MMMM d" value="${event.date}" var="eventDate"/>
-      <div class="dnf-event">
+      <div class="dnf-event ${event.hidden ? "dnf-disabled" : ""}">
         <table onclick="window.location.href='event?id=${event.id}'" title="${eventDate}">
           <thead>
             <tr>

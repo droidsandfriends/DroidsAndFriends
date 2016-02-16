@@ -287,6 +287,10 @@ td.dnf-admin-footer {
   font-size: 20pt;
 }
 
+.dnf-disabled .dnf-event-date {
+  color: #888 !important;
+}
+
 .dnf-event td {
   background-color: #666;
   border: 0;

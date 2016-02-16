@@ -12,7 +12,8 @@ public class EventsServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
     try {
-      request.setAttribute("events", Event.findAll(/* onlyVisible */ true));
+      boolean isAdmin = (boolean) request.getAttribute("isAdmin");
+      request.setAttribute("events", Event.findAll(/* onlyVisible */ !isAdmin));
     } catch (Exception e) {
       request.setAttribute("error", "Exception: " + e);
     }
