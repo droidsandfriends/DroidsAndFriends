@@ -125,7 +125,7 @@ public class Transaction {
     Query query = new Query("Transaction", parentKey).addSort(orderBy.getName(), isAscending 
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1500));
     List<Transaction> transactions = new ArrayList<Transaction>(entities.size());
     for (Entity entity : entities) {
       Transaction transaction = new Transaction(entity);

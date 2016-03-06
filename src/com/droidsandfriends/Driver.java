@@ -204,7 +204,7 @@ public class Driver {
     Query query = new Query("Driver", parentKey).addSort(orderBy.getName(), isAscending
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
     List<Driver> drivers = new ArrayList<>(entities.size());
     for (Entity driverEntity : entities) {
       Driver driver = new Driver(driverEntity);

@@ -209,7 +209,7 @@ public class Registration {
         : Query.SortDirection.DESCENDING);
 
     // TODO: Should really use a datastore index for server-side filtering
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1500));
     List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
