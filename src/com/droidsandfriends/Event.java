@@ -13,13 +13,116 @@ public class Event {
   
   private static final Venue DEFAULT_VENUE = Venue.TH;
 
-  private static final long DEFAULT_A = 15;
-  private static final long DEFAULT_B = 20;
-  private static final long DEFAULT_C = 15;
-  private static final long DEFAULT_X = 20;
-  
-  private static final long DEFAULT_DRIVER_PRICE = 330;
-  private static final long DEFAULT_GUEST_PRICE = 30;
+  // Year- and venue-specific event defaults; amounts are in whole dollars.
+  private static final Map<Property,Long> TH_DEFAULTS;
+  private static final Map<Property,Long> TH5_DEFAULTS;
+  private static final Map<Property,Long> TH_LEGACY_DEFAULTS;
+  private static final Map<Property,Long> TH5_LEGACY_DEFAULTS;
+  static {
+    // 2016 (current) 3-mile defaults
+    TH_DEFAULTS = new HashMap<Property,Long>();
+    TH_DEFAULTS.put(Property.A, 16L);
+    TH_DEFAULTS.put(Property.B, 20L);
+    TH_DEFAULTS.put(Property.C, 12L);
+    TH_DEFAULTS.put(Property.X, 8L);
+    TH_DEFAULTS.put(Property.DRIVER_PRICE, 290L);
+    TH_DEFAULTS.put(Property.GUEST_PRICE, 30L);
+    TH_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
+    TH_DEFAULTS.put(Property.CATERING_PRICE, 28L);
+    TH_DEFAULTS.put(Property.TRACK_RENTAL, 5500L);
+    TH_DEFAULTS.put(Property.SKID_PAD_RENTAL, 400L);
+    TH_DEFAULTS.put(Property.INSURANCE_FEE, 1300L);
+    TH_DEFAULTS.put(Property.AMBULANCE_FEE, 1240L);
+    TH_DEFAULTS.put(Property.CONTROL_FEE, 250L);
+    TH_DEFAULTS.put(Property.FLAGGERS_FEE, 945L);
+    TH_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 500L);
+    TH_DEFAULTS.put(Property.PA_FEE, 400L);
+    TH_DEFAULTS.put(Property.RADIOS_FEE, 40L);
+    TH_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH_DEFAULTS.put(Property.TOW_FEE, 150L);
+    TH_DEFAULTS.put(Property.FIRE_FEE, 150L);
+    TH_DEFAULTS.put(Property.SANITARY_FEE, 295L);
+    TH_DEFAULTS.put(Property.ELECTRICAL_FEE, 175L);
+    TH_DEFAULTS.put(Property.PHOTO_FEE, 250L);
+
+    // 2016 (current) 5-mile defaults
+    TH5_DEFAULTS = new HashMap<Property,Long>();
+    TH5_DEFAULTS.put(Property.A, 20L);
+    TH5_DEFAULTS.put(Property.B, 24L);
+    TH5_DEFAULTS.put(Property.C, 14L);
+    TH5_DEFAULTS.put(Property.X, 10L);
+    TH5_DEFAULTS.put(Property.DRIVER_PRICE, 330L);
+    TH5_DEFAULTS.put(Property.GUEST_PRICE, 30L);
+    TH5_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
+    TH5_DEFAULTS.put(Property.CATERING_PRICE, 28L);
+    TH5_DEFAULTS.put(Property.TRACK_RENTAL, 7000L);
+    TH5_DEFAULTS.put(Property.SKID_PAD_RENTAL, 400L);
+    TH5_DEFAULTS.put(Property.INSURANCE_FEE, 1300L);
+    TH5_DEFAULTS.put(Property.AMBULANCE_FEE, 1760L);
+    TH5_DEFAULTS.put(Property.CONTROL_FEE, 250L);
+    TH5_DEFAULTS.put(Property.FLAGGERS_FEE, 1890L);
+    TH5_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 1000L);
+    TH5_DEFAULTS.put(Property.PA_FEE, 400L);
+    TH5_DEFAULTS.put(Property.RADIOS_FEE, 40L);
+    TH5_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH5_DEFAULTS.put(Property.TOW_FEE, 150L);
+    TH5_DEFAULTS.put(Property.FIRE_FEE, 150L);
+    TH5_DEFAULTS.put(Property.SANITARY_FEE, 295L);
+    TH5_DEFAULTS.put(Property.ELECTRICAL_FEE, 175L);
+    TH5_DEFAULTS.put(Property.PHOTO_FEE, 250L);
+
+    // Legacy 3-mile defaults
+    TH_LEGACY_DEFAULTS = new HashMap<Property,Long>();
+    TH_LEGACY_DEFAULTS.put(Property.A, 15L);
+    TH_LEGACY_DEFAULTS.put(Property.B, 20L);
+    TH_LEGACY_DEFAULTS.put(Property.C, 15L);
+    TH_LEGACY_DEFAULTS.put(Property.X, 20L);
+    TH_LEGACY_DEFAULTS.put(Property.DRIVER_PRICE, 330L);
+    TH_LEGACY_DEFAULTS.put(Property.GUEST_PRICE, 30L);
+    TH_LEGACY_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
+    TH_LEGACY_DEFAULTS.put(Property.CATERING_PRICE, 28L);
+    TH_LEGACY_DEFAULTS.put(Property.TRACK_RENTAL, 4500L);
+    TH_LEGACY_DEFAULTS.put(Property.SKID_PAD_RENTAL, 400L);
+    TH_LEGACY_DEFAULTS.put(Property.INSURANCE_FEE, 1275L);
+    TH_LEGACY_DEFAULTS.put(Property.AMBULANCE_FEE, 1240L);
+    TH_LEGACY_DEFAULTS.put(Property.CONTROL_FEE, 250L);
+    TH_LEGACY_DEFAULTS.put(Property.FLAGGERS_FEE, 945L);
+    TH_LEGACY_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 250L);
+    TH_LEGACY_DEFAULTS.put(Property.PA_FEE, 400L);
+    TH_LEGACY_DEFAULTS.put(Property.RADIOS_FEE, 40L);
+    TH_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH_LEGACY_DEFAULTS.put(Property.TOW_FEE, 100L);
+    TH_LEGACY_DEFAULTS.put(Property.FIRE_FEE, 100L);
+    TH_LEGACY_DEFAULTS.put(Property.SANITARY_FEE, 295L);
+    TH_LEGACY_DEFAULTS.put(Property.ELECTRICAL_FEE, 175L);
+    TH_LEGACY_DEFAULTS.put(Property.PHOTO_FEE, 1500L);
+
+    // Legacy 5-mile defaults
+    TH5_LEGACY_DEFAULTS = new HashMap<Property,Long>();
+    TH5_LEGACY_DEFAULTS.put(Property.A, 20L);
+    TH5_LEGACY_DEFAULTS.put(Property.B, 25L);
+    TH5_LEGACY_DEFAULTS.put(Property.C, 15L);
+    TH5_LEGACY_DEFAULTS.put(Property.X, 25L);
+    TH5_LEGACY_DEFAULTS.put(Property.DRIVER_PRICE, 390L);
+    TH5_LEGACY_DEFAULTS.put(Property.GUEST_PRICE, 30L);
+    TH5_LEGACY_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
+    TH5_LEGACY_DEFAULTS.put(Property.CATERING_PRICE, 28L);
+    TH5_LEGACY_DEFAULTS.put(Property.TRACK_RENTAL, 8000L);
+    TH5_LEGACY_DEFAULTS.put(Property.SKID_PAD_RENTAL, 400L);
+    TH5_LEGACY_DEFAULTS.put(Property.INSURANCE_FEE, 1275L);
+    TH5_LEGACY_DEFAULTS.put(Property.AMBULANCE_FEE, 1760L);
+    TH5_LEGACY_DEFAULTS.put(Property.CONTROL_FEE, 250L);
+    TH5_LEGACY_DEFAULTS.put(Property.FLAGGERS_FEE, 1890L);
+    TH5_LEGACY_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 500L);
+    TH5_LEGACY_DEFAULTS.put(Property.PA_FEE, 400L);
+    TH5_LEGACY_DEFAULTS.put(Property.RADIOS_FEE, 40L);
+    TH5_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH5_LEGACY_DEFAULTS.put(Property.TOW_FEE, 100L);
+    TH5_LEGACY_DEFAULTS.put(Property.FIRE_FEE, 100L);
+    TH5_LEGACY_DEFAULTS.put(Property.SANITARY_FEE, 295L);
+    TH5_LEGACY_DEFAULTS.put(Property.ELECTRICAL_FEE, 175L);
+    TH5_LEGACY_DEFAULTS.put(Property.PHOTO_FEE, 2000L);
+  }
 
   private String id; // Datastore entity name; generated based on the event date
   private Date date;
@@ -140,17 +243,33 @@ public class Event {
   public boolean isSoldOut() {
     return (a + b + c + x) == 0;
   }
-  
+
+  public long getNetCents(long grossDollars) {
+    return Math.round((grossDollars * 97.1) - 30);
+  }
+
   public long getDriverPrice() {
     return driverPrice;
   }
   
+  public long getDriverNetCents() {
+    return getNetCents(driverPrice);
+  }
+
   public long getGuestPrice() {
     return guestPrice;
   }
 
+  public long getGuestNetCents() {
+    return getNetCents(guestPrice);
+  }
+
   public long getInstructorPrice() {
     return instructorPrice;
+  }
+
+  public long getInstructorNetCents() {
+    return getNetCents(instructorPrice);
   }
 
   public long getCateringPrice() {
@@ -526,63 +645,13 @@ public class Event {
 
   // Returns event defaults; prices are in dollars.
   private static Map<Property,Long> getDefaults(Date date, Venue venue) {
-    Map<Property,Long> defaults = new HashMap<Property,Long>(20);
-
-    long year = getYearFromDate(date);
-    boolean isFiveMile = Venue.TH5.equals(venue);
+    final long year = getYearFromDate(date);
+    final boolean isFiveMile = Venue.TH5.equals(venue);
     if (year >= 2016) {
-      // 2016 (current) budget & defaults
-      defaults.put(Property.A, isFiveMile ? 20L : 16L);
-      defaults.put(Property.B, isFiveMile ? 24L : 20L);
-      defaults.put(Property.C, isFiveMile ? 14L : 12L);
-      defaults.put(Property.X, isFiveMile ? 10L : 8L);
-      defaults.put(Property.DRIVER_PRICE, isFiveMile ? 330L : 290L);
-      defaults.put(Property.GUEST_PRICE, 30L);
-      defaults.put(Property.INSTRUCTOR_PRICE, 50L);
-      defaults.put(Property.CATERING_PRICE, 28L);
-      defaults.put(Property.TRACK_RENTAL, isFiveMile ? 7000L : 5500L);
-      defaults.put(Property.SKID_PAD_RENTAL, 400L);
-      defaults.put(Property.INSURANCE_FEE, 1300L);
-      defaults.put(Property.AMBULANCE_FEE, isFiveMile ? 1760L : 1240L);
-      defaults.put(Property.CONTROL_FEE, 250L);
-      defaults.put(Property.FLAGGERS_FEE, isFiveMile ? 1890L : 945L);
-      defaults.put(Property.COMMUNICATIONS_FEE, isFiveMile ? 1000L : 500L);
-      defaults.put(Property.PA_FEE, 400L);
-      defaults.put(Property.RADIOS_FEE, 40L);
-      defaults.put(Property.GUARD_FEE, 30L);
-      defaults.put(Property.TOW_FEE, 150L);
-      defaults.put(Property.FIRE_FEE, 150L);
-      defaults.put(Property.SANITARY_FEE, 295L);
-      defaults.put(Property.ELECTRICAL_FEE, 175L);
-      defaults.put(Property.PHOTO_FEE, 250L);
+      return isFiveMile ? TH5_DEFAULTS : TH_DEFAULTS;
     } else {
-      // Legacy budget & defaults
-      defaults.put(Property.A, isFiveMile ? 20L : 15L);
-      defaults.put(Property.B, isFiveMile ? 25L : 20L);
-      defaults.put(Property.C, isFiveMile ? 15L : 15L);
-      defaults.put(Property.X, isFiveMile ? 25L : 20L);
-      defaults.put(Property.DRIVER_PRICE, isFiveMile ? 390L : 330L);
-      defaults.put(Property.GUEST_PRICE, 30L);
-      defaults.put(Property.INSTRUCTOR_PRICE, 50L);
-      defaults.put(Property.CATERING_PRICE, 28L);
-      defaults.put(Property.TRACK_RENTAL, isFiveMile ? 8000L : 4500L);
-      defaults.put(Property.SKID_PAD_RENTAL, 400L);
-      defaults.put(Property.INSURANCE_FEE, 1275L);
-      defaults.put(Property.AMBULANCE_FEE, isFiveMile ? 1760L : 1240L);
-      defaults.put(Property.CONTROL_FEE, 250L);
-      defaults.put(Property.FLAGGERS_FEE, isFiveMile ? 1890L : 945L);
-      defaults.put(Property.COMMUNICATIONS_FEE, isFiveMile ? 500L : 250L);
-      defaults.put(Property.PA_FEE, 400L);
-      defaults.put(Property.RADIOS_FEE, 40L);
-      defaults.put(Property.GUARD_FEE, 30L);
-      defaults.put(Property.TOW_FEE, 100L);
-      defaults.put(Property.FIRE_FEE, 100L);
-      defaults.put(Property.SANITARY_FEE, 295L);
-      defaults.put(Property.ELECTRICAL_FEE, 175L);
-      defaults.put(Property.PHOTO_FEE, isFiveMile ? 2000L : 1500L);
+      return isFiveMile ? TH5_LEGACY_DEFAULTS : TH_LEGACY_DEFAULTS;
     }
-
-    return defaults;
   }
 
   @Override

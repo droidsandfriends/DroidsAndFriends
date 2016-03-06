@@ -78,34 +78,34 @@ public class EventServlet extends HttpServlet {
 
       List<LineItem> expenses = new ArrayList<>();
 
-      // Thunderhill fixed costs
-      expenses.add(new LineItem("Track rental", (isFiveMile ? 8000 : 4500) * 100, 1));
-      expenses.add(new LineItem("Insurance", 1275 * 100, 1));
-      expenses.add(new LineItem("ALS ambulance (per hour)", (isFiveMile ? 220 : 155) * 100, 8));
-      expenses.add(new LineItem("Gate guard", 240 * 100, 1));
-      expenses.add(new LineItem("Communications line", 500 * 100, (isFiveMile ? 2 : 1)));
-      expenses.add(new LineItem("PA system", 400 * 100, 1));
-      expenses.add(new LineItem("Radio rental", 40 * 100, 1));
-      expenses.add(new LineItem("Tow standby ($700 if used)", 100 * 100, 1));
-      expenses.add(new LineItem("Fire/emergency standby ($700 if used)", 100 * 100, 1));
-      expenses.add(new LineItem("Electrical service", 175 * 100, 1));
-      expenses.add(new LineItem("Flaggers", 135 * 100, flaggerCount));
-      expenses.add(new LineItem("Event control", 250 * 100, 1));
-      expenses.add(new LineItem("Skid pad rental", 400 * 100, 1));
-      expenses.add(new LineItem("Sanitary service", 295 * 100, 1));
-
-      // External fixed costs
-      expenses.add(new LineItem("Photography", (isFiveMile ? 2000 : 1500) * 100, 1));
+      // Fixed costs
+      expenses.add(new LineItem("Track rental", event.getTrackRental() * 100, 1));
+      expenses.add(new LineItem("Insurance", event.getInsuranceFee() * 100, 1));
+      expenses.add(new LineItem("ALS ambulance", event.getAmbulanceFee() * 100, 1));
+      expenses.add(new LineItem("Gate guard", event.getGuardFee() * 100, 1));
+      expenses.add(new LineItem("Communications line", event.getCommunicationsFee() * 100, 1));
+      expenses.add(new LineItem("PA system", event.getPaFee() * 100, 1));
+      expenses.add(new LineItem("Radio rental", event.getRadiosFee() * 100, 1));
+      expenses.add(new LineItem("Tow standby", event.getTowFee() * 100, 1));
+      expenses.add(new LineItem("Fire/emergency standby", event.getFireFee() * 100, 1));
+      expenses.add(new LineItem("Electrical service", event.getElectricalFee() * 100, 1));
+      expenses.add(new LineItem("Flaggers", event.getFlaggersFee() * 100, 1)); // TODO: Add numFlaggers to Event!
+      expenses.add(new LineItem("Event control", event.getControlFee() * 100, 1));
+      expenses.add(new LineItem("Skid pad rental", event.getSkidPadRental() * 100, 1));
+      expenses.add(new LineItem("Sanitary service", event.getSanitaryFee() * 100, 1));
+      expenses.add(new LineItem("Photography", event.getPhotoFee() * 100, 1));
 
       // Variable costs
-      expenses.add(new LineItem("Instructors", 53 * 100, instructorCount));
-      expenses.add(new LineItem("Catering", 28 * 100, (flaggerCount + instructorCount + driverCount + guestCount + 2)));
+      expenses.add(new LineItem("Instructors", event.getInstructorPrice() * 100,
+          instructorCount));
+      expenses.add(new LineItem("Catering", event.getCateringPrice() * 100,
+          (flaggerCount + instructorCount + driverCount + guestCount + 2)));
 
       request.setAttribute("expenses", expenses);
 
       List<LineItem> incomes = new ArrayList<>();
-      incomes.add(new LineItem("Driver registrations (after fees)", (isFiveMile ? 37839 : 32013), driverCount));
-      incomes.add(new LineItem("Guest registrations (after fees)", 2883, guestCount));
+      incomes.add(new LineItem("Driver registrations (after fees)", event.getDriverNetCents(), driverCount));
+      incomes.add(new LineItem("Guest registrations (after fees)", event.getGuestNetCents(), guestCount));
       request.setAttribute("incomes", incomes);
 
       request.setAttribute("alreadyRegistered", alreadyRegistered);
