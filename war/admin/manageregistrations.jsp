@@ -49,6 +49,7 @@
           <dnf:th property="GOOGLE_LDAP"/>
           <dnf:th property="DATE"/>
           <dnf:th property="RUN_GROUP" label="Group"/>
+          <th title="Coach?">Coach?</th>
           <dnf:th property="GUEST_COUNT"/>
           <th title="Transaction">Txn</th>
           <dnf:th property="CREATE_DATE"/>
@@ -67,6 +68,7 @@
             <td>${fn:escapeXml(registration.googleLdap)}</td>
             <td><a href="manageevent?id=${registration.eventId}"><fmt:formatDate value="${registration.date}" pattern="MMMM d, yyyy"/></a></td>
             <td class="dnf-group-${registration.runGroup}">${registration.runGroup}</td>
+            <td style="text-align:center">${registration.withInstructor ? "Y" : "&nbsp;"}</td>
             <td class="dnf-number">${registration.guestCount}</td>
             <td><a href="managetransaction?id=${registration.transactionId}" title="${registration.transactionId}">View</a></td>
             <td title="${registration.createDate}"><fmt:formatDate value="${registration.createDate}" pattern="M/d/yyyy h:mm a"/></td>
@@ -74,7 +76,7 @@
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="12">${fn:length(requestScope.registrations)} registrations</td>
+          <td class="dnf-admin-footer" colspan="13">${fn:length(requestScope.registrations)} registrations</td>
         </tr>
       </tbody>
     </table>

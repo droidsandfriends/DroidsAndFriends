@@ -142,4 +142,10 @@ public class Properties {
     return value;
   }
 
+  public static boolean validateBoolean(Property property, Map<String, String[]> parameterMap, List<String> errors) {
+    String name = property.getName();
+    String[] booleanParameters = parameterMap.get(name);
+    return booleanParameters != null && "on".equals(booleanParameters[0]);
+  }
+
 }

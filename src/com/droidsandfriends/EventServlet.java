@@ -225,8 +225,10 @@ public class EventServlet extends HttpServlet {
         }
         if (!mustPay || transaction.save()) {
           // 3. Record the registration in the datastore
+          // TODO: Add withInstructor logic
           Registration registration =
-              Registration.createNew(userId, eventId, runGroup, guestCount, (mustPay ? transaction.getId() : ""));
+              Registration.createNew(userId, eventId, runGroup, false /* withInstructor */, guestCount,
+                  (mustPay ? transaction.getId() : ""));
           if (registration.save()) {
             // 4. Capture payment
             if (mustPay) {

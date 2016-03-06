@@ -9,24 +9,25 @@ public class Registration {
 
   private static final Logger LOG = Logger.getLogger(Registration.class.getName());
 
-  private String id;            // Datastore entity name (= userId + '_' + eventId + runGroup)
-  private String userId;        // Datastore entity name of the driver; same as the Google user ID
-  private String name;          // Driver's name
-  private String car;           // Driver's car
-  private String email;         // Driver's email
-  private String googleLdap;    // Driver's Google LDAP (if Googler)
-  private String eventId;       // Datastore entity name of the event for which the driver registered
-  private Date date;            // Event date
-  private Experience runGroup;  // Run group for which the driver registered
-  private long guestCount;      // Number of guests they paid for
-  private String transactionId; // Datastore entity name of the transaction that paid for this registration
-  private Date createDate;      // Entity creation timestamp
-  private Date updateDate;      // Entity update timestamp
+  private String id;              // Datastore entity name (= userId + '_' + eventId + runGroup)
+  private String userId;          // Datastore entity name of the driver; same as the Google user ID
+  private String name;            // Driver's name
+  private String car;             // Driver's car
+  private String email;           // Driver's email
+  private String googleLdap;      // Driver's Google LDAP (if Googler)
+  private String eventId;         // Datastore entity name of the event for which the driver registered
+  private Date date;              // Event date
+  private Experience runGroup;    // Run group for which the driver registered
+  private boolean withInstructor; // Whether the driver is requesting an instructor at extra cost
+  private long guestCount;        // Number of guests they paid for
+  private String transactionId;   // Datastore entity name of the transaction that paid for this registration
+  private Date createDate;        // Entity creation timestamp
+  private Date updateDate;        // Entity update timestamp
 
   
   private Registration(String id, String userId, String name, String car, String email, String googleLdap,
-                       String eventId, Date date, Experience runGroup, long guestCount, String transactionId,
-                       Date createDate, Date updateDate) {
+                       String eventId, Date date, Experience runGroup, boolean withInstructor, long guestCount,
+                       String transactionId, Date createDate, Date updateDate) {
     this.id = id;
     this.userId = userId;
     this.name = name;
@@ -36,6 +37,7 @@ public class Registration {
     this.eventId = eventId;
     this.date = date;
     this.runGroup = runGroup;
+    this.withInstructor = withInstructor;
     this.guestCount = guestCount;
     this.transactionId = transactionId;
     this.createDate = createDate;
@@ -53,6 +55,7 @@ public class Registration {
         Entities.getString(entity, Property.EVENT_ID),
         Entities.getDate(entity, Property.DATE),
         Entities.getExperience(entity, Property.RUN_GROUP),
+        Entities.getBoolean(entity, Property.WITH_INSTRUCTOR),
         Entities.getLong(entity, Property.GUEST_COUNT),
         Entities.getString(entity, Property.TRANSACTION_ID),
         Entities.getDate(entity, Property.CREATE_DATE),
@@ -107,6 +110,10 @@ public class Registration {
     return runGroup;
   }
 
+  public boolean isWithInstructor() {
+    return withInstructor;
+  }
+
   public long getGuestCount() {
     return guestCount;
   }
@@ -123,8 +130,8 @@ public class Registration {
     return updateDate;
   }
   
-  public static Registration createNew(String userId, String eventId, Experience runGroup, long guestCount,
-      String transactionId) {
+  public static Registration createNew(String userId, String eventId, Experience runGroup, boolean withInstructor,
+                                       long guestCount, String transactionId) {
     Date now = new Date();
     return new Registration(
         generateRegistrationId(userId, eventId, runGroup),
@@ -136,6 +143,7 @@ public class Registration {
         eventId,
         /* date */ null,
         runGroup,
+        withInstructor,
         guestCount,
         transactionId,
         /* createDate */ now,
@@ -238,6 +246,7 @@ public class Registration {
     this.email = Properties.validateEmail(Property.EMAIL, parameterMap, errors);
     this.googleLdap = Properties.validateOptionalString(Property.GOOGLE_LDAP, parameterMap, errors);
     this.runGroup = Properties.validateExperience(Property.RUN_GROUP, parameterMap, errors);
+    this.withInstructor = Properties.validateBoolean(Property.WITH_INSTRUCTOR, parameterMap, errors);
     this.guestCount = Long.parseLong(parameterMap.get(Property.GUEST_COUNT.getName())[0], 10);
     this.updateDate = new Date();
 
@@ -288,6 +297,7 @@ public class Registration {
         Entities.setString(entity, Property.EVENT_ID, this.eventId);
         Entities.setDate(entity, Property.DATE, this.date);
         Entities.setExperience(entity, Property.RUN_GROUP, this.runGroup);
+        Entities.setBoolean(entity, Property.WITH_INSTRUCTOR, this.withInstructor);
         Entities.setLong(entity, Property.GUEST_COUNT, this.guestCount);
         Entities.setString(entity, Property.TRANSACTION_ID, this.transactionId);
         Entities.setDate(entity, Property.CREATE_DATE, this.createDate);
@@ -320,9 +330,9 @@ public class Registration {
   @Override
   public String toString() {
     return String.format("{id: %s, userId: %s, name: %s, car: %s, email: %s, googleLdap: %s, eventId: %s, date: %s, "
-        + "runGroup: %s, guestCount: %d, transactionId: %s, createDate: %s, updateDate: %s}",
-        id, userId, name, car, email, googleLdap, eventId, date, runGroup, guestCount, transactionId, createDate,
-        updateDate);
+        + "runGroup: %s, withInstructor: %s, guestCount: %d, transactionId: %s, createDate: %s, updateDate: %s}",
+        id, userId, name, car, email, googleLdap, eventId, date, runGroup, withInstructor, guestCount, transactionId,
+        createDate, updateDate);
   }
 
 }

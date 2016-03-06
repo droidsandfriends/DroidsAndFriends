@@ -56,6 +56,7 @@ public enum Property {
   // Registration properties
   EVENT_ID("eventId", "Event"),
   RUN_GROUP("runGroup", "Group"),
+  WITH_INSTRUCTOR("withInstructor", "With instructor"),
   GUEST_COUNT("guestCount", "Guests"),
   TRANSACTION_ID("transactionId", "Transaction"),
   

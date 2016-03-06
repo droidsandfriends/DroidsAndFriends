@@ -27,6 +27,7 @@
       <dnf:optioninput property="RUN_GROUP" value="${registration.runGroup}">
         <img class="dnf-group-logo" id="runGroupLogo" src="/images/logo_full.png">
       </dnf:optioninput>
+      <dnf:checkboxinput property="WITH_INSTRUCTOR" value="${registration.withInstructor}"/>
       <dnf:numberinput property="GUEST_COUNT" min="0" max="4" value="${registration.guestCount}"/>
       <dnf:textinput property="TRANSACTION_ID" value="" optional="true" readonly="true">
         <a href="managetransaction?id=${registration.transactionId}">${registration.transactionId}</a>

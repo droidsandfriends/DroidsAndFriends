@@ -30,6 +30,7 @@
             <td width="50%">
               <c:if test="${registration.userId == requestScope.userId}"><span style="color:#fd9240;">&#9654;&nbsp;</span></c:if>
               ${fn:escapeXml(registration.name)}
+              <span class="dnf-roster-guests">${registration.withInstructor ? "+ Coach" : ""}</span>
               <c:choose>
                 <c:when test="${registration.guestCount == 1}"><span class="dnf-roster-guests">+ 1 guest</span></c:when>
                 <c:when test="${registration.guestCount > 1}"><span class="dnf-roster-guests">+ ${registration.guestCount} guests</span></c:when>
