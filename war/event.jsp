@@ -31,10 +31,21 @@
                 </td>
                 <td class="dnf-field">
                   <select id="runGroup" name="runGroup" size="1" required>
-                    <c:if test="${event.a > 0}"><option value="A" <c:if test="${driver.experience == \"A\"}">selected</c:if>>Beginner - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option></c:if>
-                    <c:if test="${event.b > 0}"><option value="B" <c:if test="${driver.experience == \"B\"}">selected</c:if>>Intermediate - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option></c:if>
-                    <c:if test="${event.c > 0}"><option value="C" <c:if test="${driver.experience == \"C\"}">selected</c:if>>Advanced - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option></c:if>
-                    <c:if test="${event.x > 0}"><option value="X" <c:if test="${driver.experience == \"X\"}">selected</c:if>>Instructor</option></c:if>
+                    <c:if test="${event.a > 0 && requestScope.canRequestMoreInstructors}">
+                      <option value="A1">Beginner (with instructor) - <fmt:formatNumber value="${event.driverPrice + event.instructorPrice}" type="currency"/></option>
+                    </c:if>
+                    <c:if test="${event.a > 0}">
+                      <option value="A2">Beginner (no instructor) - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
+                    </c:if>
+                    <c:if test="${event.b > 0}">
+                      <option value="B">Intermediate - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
+                    </c:if>
+                    <c:if test="${event.c > 0}">
+                      <option value="C">Advanced - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
+                    </c:if>
+                    <c:if test="${event.x > 0 && (driver.experience == \"C\" || driver.experience == \"X\")}">
+                      <option value="X">Instructor</option>
+                    </c:if>
                   </select>
                   <img class="dnf-group-logo" id="runGroupLogo" src="/images/logo_full.png">
                 </td>
@@ -172,7 +183,8 @@
   var EVENT_DATE = '<fmt:formatDate value="${event.date}" pattern="MMMM d, yyyy"/>'
 
   var ITEMS = {
-    'A': {label: 'Beginner', price: ${event.driverPrice}, img: 'logo_A.png'},
+    'A1': {label: 'Beginner (with instructor)', price: ${event.driverPrice + event.instructorPrice}, img: 'logo_A.png'},
+    'A2': {label: 'Beginner (no instructor)', price: ${event.driverPrice}, img: 'logo_A.png'},
     'B': {label: 'Intermediate', price: ${event.driverPrice}, img: 'logo_B.png'},
     'C': {label: 'Advanced', price: ${event.driverPrice}, img: 'logo_C.png'},
     'G': {label: 'Guest', price: ${event.guestPrice}},

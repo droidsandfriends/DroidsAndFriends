@@ -64,11 +64,15 @@ public class EventServlet extends HttpServlet {
       String userId = (String) request.getAttribute("userId");
       boolean alreadyRegistered = false;
       int instructorCount = 0, driverCount = 0, guestCount = 0, flaggerCount = isFiveMile ? 14 : 7;
+      int requestedInstructorCount = 0;
       for (Registration registration : registrations) {
         if (Experience.X.equals(registration.getRunGroup())) {
           instructorCount++;
         } else {
           driverCount++;
+          if (registration.isWithInstructor()) {
+            requestedInstructorCount++;
+          }
         }
         guestCount += registration.getGuestCount();
         if (!alreadyRegistered && userId.equals(registration.getUserId())) {
@@ -108,6 +112,9 @@ public class EventServlet extends HttpServlet {
       incomes.add(new LineItem("Guest registrations (after fees)", event.getGuestNetCents(), guestCount));
       request.setAttribute("incomes", incomes);
 
+      // Limit the number of coaches in Group A
+      request.setAttribute("canRequestMoreInstructors", requestedInstructorCount < (instructorCount + event.getX()));
+
       request.setAttribute("alreadyRegistered", alreadyRegistered);
       request.setAttribute("event", event);
       request.setAttribute("registrations", registrations);
@@ -132,7 +139,15 @@ public class EventServlet extends HttpServlet {
 
       // Process arguments
       String eventId = request.getParameter("id");
-      Experience runGroup = Experience.valueOf(request.getParameter("runGroup"));
+      // Handle A1 vs. A2 pseudo-run groups.
+      String runGroupParameter = request.getParameter("runGroup");
+      boolean isWithInstructor = false;
+      if (runGroupParameter != null && runGroupParameter.startsWith("A")) {
+        isWithInstructor = "A1".equals(runGroupParameter);
+        runGroupParameter = "A";
+      }
+      Experience runGroup = Experience.valueOf(runGroupParameter);
+      String runGroupLabel = runGroup.getLabel() + (isWithInstructor ? " + Coach" : "");
       int guestCount =  Integer.parseInt(request.getParameter("guestCount"));
 
       // If the driver doesn't have a profile, force them to create one first
@@ -147,22 +162,22 @@ public class EventServlet extends HttpServlet {
       Charge charge = null;
       if (mustPay) {
         Event event = Event.findById(eventId);
-        long driverPrice = event.getDriverPrice();
+        long driverPrice = event.getDriverPrice() + (isWithInstructor ? event.getInstructorPrice() : 0);
         long guestPrice = event.getGuestPrice();
         long orderAmount = driverPrice + (guestCount * guestPrice); // In dollars, not cents
         String orderDescription;
         switch (guestCount) {
           case 0:
-            orderDescription = String.format("%s: %s - $%d",
-                event.getDateDescription(), runGroup.getLabel(), driverPrice);
+            orderDescription = String.format("%s: %s ($%d)",
+                event.getDateDescription(), runGroupLabel, driverPrice);
             break;
           case 1:
-            orderDescription = String.format("%s: %s - $%d, 1 Guest - $%d",
-                event.getDateDescription(), runGroup.getLabel(), driverPrice, guestPrice);
+            orderDescription = String.format("%s: %s ($%d), 1 Guest ($%d)",
+                event.getDateDescription(), runGroupLabel, driverPrice, guestPrice);
             break;
           default:
-            orderDescription = String.format("%s: %s - $%d, %d Guests - $%d",
-                event.getDateDescription(), runGroup.getLabel(), driverPrice, guestCount, (guestCount * guestPrice));
+            orderDescription = String.format("%s: %s ($%d), %d Guests ($%d)",
+                event.getDateDescription(), runGroupLabel, driverPrice, guestCount, (guestCount * guestPrice));
             break;
         }
 
@@ -225,9 +240,8 @@ public class EventServlet extends HttpServlet {
         }
         if (!mustPay || transaction.save()) {
           // 3. Record the registration in the datastore
-          // TODO: Add withInstructor logic
           Registration registration =
-              Registration.createNew(userId, eventId, runGroup, false /* withInstructor */, guestCount,
+              Registration.createNew(userId, eventId, runGroup, isWithInstructor, guestCount,
                   (mustPay ? transaction.getId() : ""));
           if (registration.save()) {
             // 4. Capture payment
