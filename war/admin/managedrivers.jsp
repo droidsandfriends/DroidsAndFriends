@@ -52,12 +52,12 @@
           <dnf:th property="MEMBERSHIP_STATUS" label="Status"/>
           <dnf:th property="NAME"/>
           <dnf:th property="CAR"/>
-          <dnf:th property="REFERRER"/>
+          <!-- dnf:th property="REFERRER"/ -->
           <dnf:th property="EXPERIENCE" label="Group"/>
-          <dnf:th property="GAS_CARD"/>
+          <!-- dnf:th property="GAS_CARD"/ -->
           <dnf:th property="EMAIL"/>
           <dnf:th property="GOOGLE_LDAP"/>
-          <dnf:th property="PHONE"/>
+          <!-- dnf:th property="PHONE"/ -->
           <dnf:th property="CREATE_DATE"/>
           <dnf:th property="UPDATE_DATE"/>
         </tr>
@@ -69,18 +69,18 @@
             <td class="dnf-member-${driver.membershipStatus}" title="${driver.membershipStatus.description}">${driver.membershipStatus}</td>
             <td><a href="managedriver?id=${driver.id}" title="Edit ${fn:escapeXml(driver.name)}">${fn:escapeXml(driver.name)}</a></td>
             <td>${fn:escapeXml(driver.car)}</td>
-            <td>${fn:escapeXml(driver.referrer)}</td>
+            <!-- td>${fn:escapeXml(driver.referrer)}</td -->
             <td class="dnf-group-${driver.experience}" title="${fn:escapeXml(driver.about)}">${driver.experience}</td>
-            <td>${driver.gasCard.label}</td>
+            <!-- td>${driver.gasCard.label}</td -->
             <td>${fn:escapeXml(driver.email)}</td>
             <td>${fn:escapeXml(driver.googleLdap)}</td>
-            <td>${fn:escapeXml(driver.phone)}</td>
+            <!-- td>${fn:escapeXml(driver.phone)}</td -->
             <td title="${driver.createDate}"><fmt:formatDate value="${driver.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${driver.updateDate}"><fmt:formatDate value="${driver.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="12">${fn:length(drivers)} drivers</td>
+          <td class="dnf-admin-footer" colspan="9">${fn:length(drivers)} drivers</td>
         </tr>
       </tbody>
     </table>

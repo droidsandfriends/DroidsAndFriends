@@ -28,7 +28,7 @@
         <tr>
           <th></th>
           <dnf:th property="NAME"/>
-          <dnf:th property="EMAIL"/>
+          <!-- dnf:th property="EMAIL"/ -->
           <dnf:th property="AMOUNT"/>
           <dnf:th property="DESCRIPTION"/>
           <dnf:th property="CREATE_DATE"/>
@@ -41,7 +41,7 @@
           <tr>
             <td><input class="dnf-checkbox" name="delete" type="checkbox" value="${transaction.id}"></td>
             <td><a href="managedriver?id=${transaction.userId}">${fn:escapeXml(transaction.name)}</a></td>
-            <td>${fn:escapeXml(transaction.email)}</td>
+            <!-- td>${fn:escapeXml(transaction.email)}</td -->
             <td class="dnf-number"><a href="https://manage.stripe.com/payments/${transaction.id}"><fmt:formatNumber value="${transaction.dollarAmount}" type="currency"/></a></td>
             <td><a href="managetransaction?id=${transaction.id}">${fn:escapeXml(transaction.description)}</a></td>
             <td title="${transaction.createDate}"><fmt:formatDate value="${transaction.createDate}" pattern="M/d/yyyy h:mm a"/></td>
@@ -49,7 +49,7 @@
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="7">${fn:length(transactions)} transactions</td>
+          <td class="dnf-admin-footer" colspan="6">${fn:length(transactions)} transactions</td>
         </tr>
       </tbody>
     </table>

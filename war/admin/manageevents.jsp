@@ -22,8 +22,8 @@
           <dnf:th property="B" label="B"/>
           <dnf:th property="C" label="C"/>
           <dnf:th property="X" label="X"/>
-          <dnf:th property="DRIVER_PRICE"/>
-          <dnf:th property="GUEST_PRICE"/>
+          <!-- dnf:th property="DRIVER_PRICE"/ -->
+          <!-- dnf:th property="GUEST_PRICE"/ -->
           <dnf:th property="CREATE_DATE"/>
           <dnf:th property="UPDATE_DATE"/>
         </tr>
@@ -38,14 +38,14 @@
             <td class="dnf-number dnf-group-${event.b > 0 ? "B" : "full"}">${event.b}</td>
             <td class="dnf-number dnf-group-${event.c > 0 ? "C" : "full"}">${event.c}</td>
             <td class="dnf-number dnf-group-${event.x > 0 ? "X" : "full"}">${event.x}</td>
-            <td class="dnf-number"><fmt:formatNumber value="${event.driverPrice}" type="currency"/></td>
-            <td class="dnf-number"><fmt:formatNumber value="${event.guestPrice}" type="currency"/></td>
+            <!-- td class="dnf-number"><fmt:formatNumber value="${event.driverPrice}" type="currency"/></td -->
+            <!-- td class="dnf-number"><fmt:formatNumber value="${event.guestPrice}" type="currency"/></td -->
             <td title="${event.createDate}"><fmt:formatDate value="${event.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${event.updateDate}"><fmt:formatDate value="${event.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="11">${fn:length(events)} events</td>
+          <td class="dnf-admin-footer" colspan="9">${fn:length(events)} events</td>
         </tr>
       </tbody>
     </table>
