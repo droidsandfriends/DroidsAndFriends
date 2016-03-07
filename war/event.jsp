@@ -32,19 +32,19 @@
                 <td class="dnf-field">
                   <select id="runGroup" name="runGroup" size="1" required>
                     <c:if test="${event.a > 0 && requestScope.canRequestMoreInstructors}">
-                      <option value="A1">Beginner (with instructor) - <fmt:formatNumber value="${event.driverPrice + event.instructorPrice}" type="currency"/></option>
+                      <option value="A1"}>Beginner (with instructor) - <fmt:formatNumber value="${event.driverPrice + event.instructorPrice}" type="currency"/></option>
                     </c:if>
                     <c:if test="${event.a > 0}">
                       <option value="A2">Beginner (no instructor) - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
                     </c:if>
                     <c:if test="${event.b > 0}">
-                      <option value="B">Intermediate - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
+                      <option value="B" ${driver.experience == "B" ? "selected" : ""}>Intermediate - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
                     </c:if>
                     <c:if test="${event.c > 0}">
-                      <option value="C">Advanced - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
+                      <option value="C" ${driver.experience == "C" ? "selected" : ""}>Advanced - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
                     </c:if>
                     <c:if test="${event.x > 0 && (driver.experience == \"C\" || driver.experience == \"X\")}">
-                      <option value="X">Instructor</option>
+                      <option value="X" ${driver.experience == "X" ? "selected" : ""}>Instructor</option>
                     </c:if>
                   </select>
                   <img class="dnf-group-logo" id="runGroupLogo" src="/images/logo_full.png">
