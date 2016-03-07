@@ -53,7 +53,7 @@
               <tr>
                 <td></td>
                 <td class="dnf-hint">
-                  Choose based on your experience
+                  <span id="runGroupHint">Choose based on your experience</span><br>
                   (<a href="http://www.droidsandfriends.com/faq#TOC-What-run-group-should-I-sign-up-for-" target="_blank">more info</a>)
                 </td>
               </tr>
@@ -184,12 +184,12 @@
   var EVENT_DATE = '<fmt:formatDate value="${event.date}" pattern="MMMM d, yyyy"/>'
 
   var ITEMS = {
-    'A1': {label: 'Beginner (with instructor)', price: ${event.driverPrice + event.instructorPrice}, img: 'logo_A.png'},
-    'A2': {label: 'Beginner (no instructor)', price: ${event.driverPrice}, img: 'logo_A.png'},
-    'B': {label: 'Intermediate', price: ${event.driverPrice}, img: 'logo_B.png'},
-    'C': {label: 'Advanced', price: ${event.driverPrice}, img: 'logo_C.png'},
-    'G': {label: 'Guest', price: ${event.guestPrice}},
-    'X': {label: 'Instructor', price: 0, img: 'logo_X.png'}
+    'A1': {label: 'Beginner (with instructor)', hint: 'New to track driving, needs instruction', price: ${event.driverPrice + event.instructorPrice}, img: 'logo_A.png'},
+    'A2': {label: 'Beginner (no instructor)', hint: '2-10 track days, comfortable driving solo', price: ${event.driverPrice}, img: 'logo_A.png'},
+    'B': {label: 'Intermediate', hint: '10-20 track days', price: ${event.driverPrice}, img: 'logo_B.png'},
+    'C': {label: 'Advanced', hint: '20+ track days, comfortable with open passing', price: ${event.driverPrice}, img: 'logo_C.png'},
+    'G': {label: 'Guest', hint: 'Guest only, not driving on track', price: ${event.guestPrice}},
+    'X': {label: 'Instructor', hint: 'Experienced HPDE instructor', price: 0, img: 'logo_X.png'}
   };
 
   var ORDER = {};
@@ -200,6 +200,7 @@
 
     $('runGroupLogo').src = ORDER.logo = '/images/' + item.img;
     $('runGroupLogo').title = item.label;
+    $('runGroupHint').innerHTML = item.hint;
 
     var guestCount = $('guestCount').value;
     var guest = ITEMS['G'];
