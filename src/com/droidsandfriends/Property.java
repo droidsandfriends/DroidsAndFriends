@@ -24,6 +24,7 @@ public enum Property {
   PHONE("phone", "Phone", "Mobile phone number with area code"),
   EMERGENCY_NAME("emergencyName", "Emergency<br>contact", "Person to call in case of an emergency"),
   EMERGENCY_PHONE("emergencyPhone", "Emergency<br>phone", "Number to call in case of an emergency"),
+  NUM_REGISTRATIONS("numRegistrations", "Number of<br>registrations", "Number of registrations"),
 
   // Event properties
   DATE("date", "Date"),

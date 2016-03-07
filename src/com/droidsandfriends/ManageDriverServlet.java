@@ -32,8 +32,7 @@ public class ManageDriverServlet extends HttpServlet {
     driver.guessGoogleLdap();
 
     // List all registrations for this driver
-    List<Registration> registrations = Registration.findAllByUserId(id);
-    request.setAttribute("registrations", registrations);
+    request.setAttribute("registrations", driver.getRegistrations());
 
     // Render form
     request.setAttribute("driver", driver);

@@ -9,6 +9,8 @@ public class Registration {
 
   private static final Logger LOG = Logger.getLogger(Registration.class.getName());
 
+  private static Map<String, List<Registration>> REGISTRATION_MAP;
+
   private String id;              // Datastore entity name (= userId + '_' + eventId + runGroup)
   private String userId;          // Datastore entity name of the driver; same as the Google user ID
   private String name;            // Driver's name
@@ -325,6 +327,23 @@ public class Registration {
     }
     
     return success;
+  }
+
+  public static Map<String, List<Registration>> getRegistrationMap() {
+    if (REGISTRATION_MAP == null) {
+      REGISTRATION_MAP = new HashMap<String, List<Registration>>();
+      List<Registration> allRegistrations = Registration.findAll();
+      for (Registration registration : allRegistrations) {
+        String userId = registration.getUserId();
+        List<Registration> registrations = REGISTRATION_MAP.get(userId);
+        if (registrations == null) {
+          registrations = new ArrayList<Registration>();
+          REGISTRATION_MAP.put(userId, registrations);
+        }
+        registrations.add(registration);
+      }
+    }
+    return REGISTRATION_MAP;
   }
 
   @Override

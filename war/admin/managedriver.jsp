@@ -50,7 +50,7 @@
             <td><a href="manageregistration?id=${registration.id}" title="${registration.id}">Edit</a></td>
             <td><a href="manageevent?id=${registration.eventId}"><fmt:formatDate value="${registration.date}" pattern="MMMM d, yyyy"/></a></td>
             <td class="dnf-group-${registration.runGroup}">${registration.runGroup}</td>
-            <td class="dnf-number">${registration.guestCount}</td>
+            <td class="dnf-number">${registration.guestCount > 0 ? registration.guestCount : ""}</td>
             <td><a href="managetransaction?id=${registration.transactionId}" title="${registration.transactionId}">View</a></td>
           </tr>
         </c:forEach>

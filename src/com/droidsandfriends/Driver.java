@@ -144,6 +144,15 @@ public class Driver {
     return emergencyPhone;
   }
 
+  public List<Registration> getRegistrations() {
+    return Registration.getRegistrationMap().get(id);
+  }
+
+  public int getNumRegistrations() {
+    List<Registration> registrations = this.getRegistrations();
+    return registrations == null ? 0 : registrations.size();
+  }
+
   public Date getCreateDate() {
     return createDate;
   }
@@ -197,11 +206,14 @@ public class Driver {
         /* membershioStatus */ null);
   }
 
-  public static List<Driver> findAll(Property orderBy, boolean isAscending, Experience experience, boolean onlyGooglers,
+  public static List<Driver> findAll(Property orderBy, final boolean isAscending, Experience experience, boolean onlyGooglers,
                                      MembershipStatus membershipStatus) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Drivers", "default");
-    Query query = new Query("Driver", parentKey).addSort(orderBy.getName(), isAscending
+    String orderByName = Property.NUM_REGISTRATIONS.equals(orderBy)
+        ? Property.CREATE_DATE.getName()
+        : orderBy.getName();
+    Query query = new Query("Driver", parentKey).addSort(orderByName, isAscending
         ? Query.SortDirection.ASCENDING
         : Query.SortDirection.DESCENDING);
     List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1000));
@@ -214,6 +226,16 @@ public class Driver {
           (membershipStatus == null || membershipStatus.equals(driver.getMembershipStatus()))) {
         drivers.add(driver);
       }
+    }
+    if (Property.NUM_REGISTRATIONS.equals(orderBy)) {
+      // Have to manually sort. Oops.
+      Collections.sort(drivers, new Comparator<Driver>() {
+        @Override public int compare(Driver thisDriver, Driver thatDriver) {
+          return isAscending
+              ? thisDriver.getNumRegistrations() - thatDriver.getNumRegistrations()
+              : thatDriver.getNumRegistrations() - thisDriver.getNumRegistrations();
+        }
+      });
     }
     return drivers;
   }

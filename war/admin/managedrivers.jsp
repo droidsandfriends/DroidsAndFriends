@@ -58,6 +58,7 @@
           <dnf:th property="EMAIL"/>
           <dnf:th property="GOOGLE_LDAP"/>
           <!-- dnf:th property="PHONE"/ -->
+          <dnf:th property="NUM_REGISTRATIONS"/>
           <dnf:th property="CREATE_DATE"/>
           <dnf:th property="UPDATE_DATE"/>
         </tr>
@@ -75,6 +76,7 @@
             <td>${fn:escapeXml(driver.email)}</td>
             <td>${fn:escapeXml(driver.googleLdap)}</td>
             <!-- td>${fn:escapeXml(driver.phone)}</td -->
+            <td class="dnf-number">${driver.numRegistrations > 0 ? driver.numRegistrations : ""}</td>
             <td title="${driver.createDate}"><fmt:formatDate value="${driver.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${driver.updateDate}"><fmt:formatDate value="${driver.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
