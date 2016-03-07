@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Experience implements Option {
-  A("Beginner", "0-2 track days"),
-  B("Intermediate", "3-10 track days"),
-  C("Advanced", ">10 track days"),
+  A("Beginner", "0-10 track days"),
+  B("Intermediate", "10-20 track days"),
+  C("Advanced", "20+ track days"),
   X("Instructor", "experienced HPDE coach");
 
   private String label;

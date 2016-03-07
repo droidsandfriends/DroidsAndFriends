@@ -94,68 +94,69 @@
       </c:otherwise>
     </c:choose>
   </fieldset>
-  <!-- Budget start -->
-  <div class="dnf-roster">
-    <table>
-      <thead>
-        <tr>
-          <th colspan="5">
-            <img src="/images/logo_budget.png">
-            <span class="dnf-group-label">Budget</span>
-            <br>
-            <span id="budgetToggle" class="dnf-group-info" style="color:#fd9240;cursor:pointer">&#9658;&nbsp;Show details</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="budgetTbody">
-        <tr class="dnf-hidden" style="font-weight:bold">
-          <td>Item</td>
-          <td align="right">Price</td>
-          <td align="right">Qty</td>
-          <td align="right">Subtotal</td>
-          <td align="right">Total</td>
-        </tr>
-        <c:set var="subtotal" value="0"/>
-        <c:set var="total" value="0"/>
-        <c:forEach items="${expenses}" var="expense">
-          <c:set var="subtotal" value="${-expense.dollars * expense.quantity}"/>
-          <c:set var="total" value="${total + subtotal}"/>
-          <tr class="dnf-hidden">
-            <td>${fn:escapeXml(expense.name)}</td>
-            <td align="right"><fmt:formatNumber value="${expense.dollars}" type="currency"/></td>
-            <td align="right"><fmt:formatNumber value="${expense.quantity}" type="number"/></td>
-            <td align="right" style="${subtotal < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${subtotal}" type="currency"/></td>
-            <td align="right" style="${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
-          </tr>
-        </c:forEach>
-        <c:forEach items="${incomes}" var="income">
-          <c:set var="subtotal" value="${income.dollars * income.quantity}"/>
-          <c:set var="total" value="${total + subtotal}"/>
-          <tr class="dnf-hidden">
-            <td>${fn:escapeXml(income.name)}</td>
-            <td align="right"><fmt:formatNumber value="${income.dollars}" type="currency"/></td>
-            <td align="right"><fmt:formatNumber value="${income.quantity}" type="number"/></td>
-            <td align="right" style="${subtotal < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${subtotal}" type="currency"/></td>
-            <td align="right" style="${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
-          </tr>
-        </c:forEach>
-        <tr id="budgetTotal">
-          <td style="background-color:#000;font-weight:bold" colspan="4">Balance</td>
-          <td align="right" style="background-color:#000;font-weight:bold;${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5">&nbsp;</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <!-- Budget end -->
   <dnf:roster event="${requestScope.event}" group="A" label="Beginner" registrations="${requestScope.registrations}"/>
   <dnf:roster event="${requestScope.event}" group="B" label="Intermediate" registrations="${requestScope.registrations}"/>
   <dnf:roster event="${requestScope.event}" group="C" label="Advanced" registrations="${requestScope.registrations}"/>
   <dnf:roster event="${requestScope.event}" group="X" label="Instructor" registrations="${requestScope.registrations}"/>
+  <!-- Budget start -->
+  <div class="dnf-roster">
+    <table>
+      <thead>
+      <tr>
+        <th colspan="5">
+          <img src="/images/logo_budget.png">
+          <span class="dnf-group-label">Budget</span>
+          <br>
+          <span id="budgetToggle" class="dnf-group-info" style="color:#fd9240;cursor:pointer">&#9658;&nbsp;Show details</span>
+        </th>
+      </tr>
+      </thead>
+      <tbody id="budgetTbody">
+      <tr class="dnf-hidden" style="font-weight:bold">
+        <td>Item</td>
+        <td align="right">Price</td>
+        <td align="right">Qty</td>
+        <td align="right">Subtotal</td>
+        <td align="right">Total</td>
+      </tr>
+      <c:set var="subtotal" value="0"/>
+      <c:set var="total" value="0"/>
+      <c:forEach items="${expenses}" var="expense">
+        <c:set var="subtotal" value="${-expense.dollars * expense.quantity}"/>
+        <c:set var="total" value="${total + subtotal}"/>
+        <tr class="dnf-hidden">
+          <td>${fn:escapeXml(expense.name)}</td>
+          <td align="right"><fmt:formatNumber value="${expense.dollars}" type="currency"/></td>
+          <td align="right"><fmt:formatNumber value="${expense.quantity}" type="number"/></td>
+          <td align="right" style="${subtotal < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${subtotal}" type="currency"/></td>
+          <td align="right" style="${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
+        </tr>
+      </c:forEach>
+      <c:forEach items="${incomes}" var="income">
+        <c:set var="subtotal" value="${income.dollars * income.quantity}"/>
+        <c:set var="total" value="${total + subtotal}"/>
+        <tr class="dnf-hidden">
+          <td>${fn:escapeXml(income.name)}</td>
+          <td align="right"><fmt:formatNumber value="${income.dollars}" type="currency"/></td>
+          <td align="right"><fmt:formatNumber value="${income.quantity}" type="number"/></td>
+          <td align="right" style="${subtotal < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${subtotal}" type="currency"/></td>
+          <td align="right" style="${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
+        </tr>
+      </c:forEach>
+      <tr id="budgetTotal">
+        <td style="background-color:#000;font-weight:bold" colspan="4">Balance</td>
+        <td align="right" style="background-color:#000;font-weight:bold;${total < 0 ? "color:#c66" : "color:#6c6"}"><fmt:formatNumber value="${total}" type="currency"/></td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="5">&nbsp;</td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+  <!-- Budget end -->
+
   <script type="text/javascript">
 
   var budgetVisible = false;
@@ -203,6 +204,7 @@
     var guestCount = $('guestCount').value;
     var guest = ITEMS['G'];
 
+    ORDER.runGroup = runGroup;
     ORDER.amount = item.price + (guestCount * guest.price);
     ORDER.description = EVENT_DATE + ': ' + item.label + ' - $' + item.price;
     if (guestCount > 0) {
@@ -232,6 +234,12 @@
     });
  
   $addHandler($('payButton'), 'click', function(e) {
+    if (ORDER.runGroup == 'A2' && !window.confirm(
+            'Please confirm that you have sufficient experience\n' +
+            'to drive solo, and don\'t need an instructor to ride\n' +
+            'with you. Contact the organizers with questions.')) {
+      return;
+    }
    	if (ORDER.amount > 0) {
       stripeCheckout.open({
         amount: 100 * ORDER.amount,
@@ -263,5 +271,6 @@
   updateOrder();
 
   </script>
+
 </body>
 </html>

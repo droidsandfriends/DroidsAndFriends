@@ -81,8 +81,6 @@ public class EventServlet extends HttpServlet {
       }
 
       List<LineItem> expenses = new ArrayList<>();
-
-      // Fixed costs
       expenses.add(new LineItem("Track rental", event.getTrackRental() * 100, 1));
       expenses.add(new LineItem("Insurance", event.getInsuranceFee() * 100, 1));
       expenses.add(new LineItem("ALS ambulance", event.getAmbulanceFee() * 100, 1));
@@ -93,27 +91,29 @@ public class EventServlet extends HttpServlet {
       expenses.add(new LineItem("Tow standby", event.getTowFee() * 100, 1));
       expenses.add(new LineItem("Fire/emergency standby", event.getFireFee() * 100, 1));
       expenses.add(new LineItem("Electrical service", event.getElectricalFee() * 100, 1));
-      expenses.add(new LineItem("Flaggers", event.getFlaggersFee() * 100, 1)); // TODO: Add numFlaggers to Event!
+      expenses.add(new LineItem("Flaggers", event.getFlaggersFee() * 100, 1));
       expenses.add(new LineItem("Event control", event.getControlFee() * 100, 1));
       expenses.add(new LineItem("Skid pad rental", event.getSkidPadRental() * 100, 1));
       expenses.add(new LineItem("Sanitary service", event.getSanitaryFee() * 100, 1));
-      expenses.add(new LineItem("Photography", event.getPhotoFee() * 100, 1));
-
-      // Variable costs
+      expenses.add(new LineItem("Photography (appearance fee)", event.getPhotoFee() * 100, 1));
+      expenses.add(new LineItem("Group leads", event.getInstructorPrice() * 100, 3));
       expenses.add(new LineItem("Instructors", event.getInstructorPrice() * 100,
           instructorCount));
       expenses.add(new LineItem("Catering", event.getCateringPrice() * 100,
-          (flaggerCount + instructorCount + driverCount + guestCount + 2)));
-
+          (flaggerCount + instructorCount + driverCount + guestCount + 5)));
       request.setAttribute("expenses", expenses);
 
       List<LineItem> incomes = new ArrayList<>();
-      incomes.add(new LineItem("Driver registrations (after fees)", event.getDriverNetCents(), driverCount));
-      incomes.add(new LineItem("Guest registrations (after fees)", event.getGuestNetCents(), guestCount));
+      incomes.add(new LineItem("Driver + coach registrations (after fees)",
+          event.getDriverNetCents() + event.getInstructorNetCents(), requestedInstructorCount));
+      incomes.add(new LineItem("Driver registrations (after fees)",
+          event.getDriverNetCents(), (driverCount - requestedInstructorCount)));
+      incomes.add(new LineItem("Guest registrations (after fees)",
+          event.getGuestNetCents(), guestCount));
       request.setAttribute("incomes", incomes);
 
       // Limit the number of coaches in Group A
-      request.setAttribute("canRequestMoreInstructors", requestedInstructorCount < (instructorCount + event.getX()));
+      request.setAttribute("canRequestMoreInstructors", requestedInstructorCount < (instructorCount + event.getX() - 1));
 
       request.setAttribute("alreadyRegistered", alreadyRegistered);
       request.setAttribute("event", event);

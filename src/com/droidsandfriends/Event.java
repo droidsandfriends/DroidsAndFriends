@@ -22,10 +22,10 @@ public class Event {
     // 2016 (current) 3-mile defaults
     TH_DEFAULTS = new HashMap<Property,Long>();
     TH_DEFAULTS.put(Property.A, 16L);
-    TH_DEFAULTS.put(Property.B, 20L);
+    TH_DEFAULTS.put(Property.B, 18L);
     TH_DEFAULTS.put(Property.C, 12L);
-    TH_DEFAULTS.put(Property.X, 8L);
-    TH_DEFAULTS.put(Property.DRIVER_PRICE, 290L);
+    TH_DEFAULTS.put(Property.X, 11L);
+    TH_DEFAULTS.put(Property.DRIVER_PRICE, 299L);
     TH_DEFAULTS.put(Property.GUEST_PRICE, 30L);
     TH_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
     TH_DEFAULTS.put(Property.CATERING_PRICE, 28L);
@@ -38,7 +38,7 @@ public class Event {
     TH_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 500L);
     TH_DEFAULTS.put(Property.PA_FEE, 400L);
     TH_DEFAULTS.put(Property.RADIOS_FEE, 40L);
-    TH_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH_DEFAULTS.put(Property.GUARD_FEE, 240L);
     TH_DEFAULTS.put(Property.TOW_FEE, 150L);
     TH_DEFAULTS.put(Property.FIRE_FEE, 150L);
     TH_DEFAULTS.put(Property.SANITARY_FEE, 295L);
@@ -47,11 +47,11 @@ public class Event {
 
     // 2016 (current) 5-mile defaults
     TH5_DEFAULTS = new HashMap<Property,Long>();
-    TH5_DEFAULTS.put(Property.A, 20L);
-    TH5_DEFAULTS.put(Property.B, 24L);
+    TH5_DEFAULTS.put(Property.A, 18L);
+    TH5_DEFAULTS.put(Property.B, 22L);
     TH5_DEFAULTS.put(Property.C, 14L);
-    TH5_DEFAULTS.put(Property.X, 10L);
-    TH5_DEFAULTS.put(Property.DRIVER_PRICE, 330L);
+    TH5_DEFAULTS.put(Property.X, 13L);
+    TH5_DEFAULTS.put(Property.DRIVER_PRICE, 339L);
     TH5_DEFAULTS.put(Property.GUEST_PRICE, 30L);
     TH5_DEFAULTS.put(Property.INSTRUCTOR_PRICE, 50L);
     TH5_DEFAULTS.put(Property.CATERING_PRICE, 28L);
@@ -64,7 +64,7 @@ public class Event {
     TH5_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 1000L);
     TH5_DEFAULTS.put(Property.PA_FEE, 400L);
     TH5_DEFAULTS.put(Property.RADIOS_FEE, 40L);
-    TH5_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH5_DEFAULTS.put(Property.GUARD_FEE, 240L);
     TH5_DEFAULTS.put(Property.TOW_FEE, 150L);
     TH5_DEFAULTS.put(Property.FIRE_FEE, 150L);
     TH5_DEFAULTS.put(Property.SANITARY_FEE, 295L);
@@ -90,7 +90,7 @@ public class Event {
     TH_LEGACY_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 250L);
     TH_LEGACY_DEFAULTS.put(Property.PA_FEE, 400L);
     TH_LEGACY_DEFAULTS.put(Property.RADIOS_FEE, 40L);
-    TH_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 240L);
     TH_LEGACY_DEFAULTS.put(Property.TOW_FEE, 100L);
     TH_LEGACY_DEFAULTS.put(Property.FIRE_FEE, 100L);
     TH_LEGACY_DEFAULTS.put(Property.SANITARY_FEE, 295L);
@@ -116,7 +116,7 @@ public class Event {
     TH5_LEGACY_DEFAULTS.put(Property.COMMUNICATIONS_FEE, 500L);
     TH5_LEGACY_DEFAULTS.put(Property.PA_FEE, 400L);
     TH5_LEGACY_DEFAULTS.put(Property.RADIOS_FEE, 40L);
-    TH5_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 30L);
+    TH5_LEGACY_DEFAULTS.put(Property.GUARD_FEE, 240L);
     TH5_LEGACY_DEFAULTS.put(Property.TOW_FEE, 100L);
     TH5_LEGACY_DEFAULTS.put(Property.FIRE_FEE, 100L);
     TH5_LEGACY_DEFAULTS.put(Property.SANITARY_FEE, 295L);
@@ -384,7 +384,7 @@ public class Event {
         defaults.get(Property.ELECTRICAL_FEE),
         defaults.get(Property.PHOTO_FEE),
         null /* description */,
-        false /* hidden */,
+        true /* hidden */,
         date /* createDate */,
         date /* updateDate */
     );
