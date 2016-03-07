@@ -16,6 +16,8 @@ public class ManageRegistrationsServlet extends HttpServlet {
     PageState pageState = PageState.get(request);
     request.setAttribute("pageState", pageState);
 
+    Registration.invalidateRegistrationMap();
+
     pageState.handleSort(request);
 
     List<Event> events = Event.findAll();

@@ -16,6 +16,8 @@ public class ManageDriversServlet extends HttpServlet {
     PageState pageState = PageState.get(request);
     request.setAttribute("pageState", pageState);
 
+    Registration.invalidateRegistrationMap();
+
     pageState.handleSort(request);
     List<Driver> drivers = Driver.findAll(pageState.getOrderBy(), pageState.isAscending(), pageState.getExperience(),
         pageState.isOnlyGooglers(), pageState.getMembershipStatus());

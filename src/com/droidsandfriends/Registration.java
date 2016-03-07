@@ -346,6 +346,10 @@ public class Registration {
     return REGISTRATION_MAP;
   }
 
+  public static void invalidateRegistrationMap() {
+    REGISTRATION_MAP = null;
+  }
+
   @Override
   public String toString() {
     return String.format("{id: %s, userId: %s, name: %s, car: %s, email: %s, googleLdap: %s, eventId: %s, date: %s, "
