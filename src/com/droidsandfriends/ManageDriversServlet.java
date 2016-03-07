@@ -22,12 +22,15 @@ public class ManageDriversServlet extends HttpServlet {
     request.setAttribute("drivers", drivers);
 
     StringBuilder mailingList = new StringBuilder();
+    StringBuilder csv = new StringBuilder();
     for (Driver driver : drivers) {
       mailingList.append(String.format("\"%s\" <%s>, ", driver.getName(), pageState.isOnlyGooglers()
           ? driver.getGoogleLdap() + "@google.com"
           : driver.getEmail()));
+      csv.append(driver.toCsv()).append("\n");
     }
     request.setAttribute("mailingList", mailingList);
+    request.setAttribute("csv", csv);
    
     // Render form.
     request.getRequestDispatcher("/admin/managedrivers.jsp").forward(request, response);

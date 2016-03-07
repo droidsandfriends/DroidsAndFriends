@@ -93,6 +93,9 @@
   <fieldset style="text-align: center">
     <textarea cols="80" rows="10">${fn:escapeXml(mailingList)}</textarea>
   </fieldset>
+  <fieldset style="text-align: center">
+    <textarea cols="80" rows="10">${fn:escapeXml(csv)}</textarea>
+  </fieldset>
   <script type="text/javascript">
     function doFilter() {
       $('action').value = 'filter';

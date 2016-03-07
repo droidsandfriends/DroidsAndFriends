@@ -2,6 +2,8 @@ package com.droidsandfriends;
 
 import com.google.appengine.api.datastore.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -351,6 +353,32 @@ public class Driver {
     }
     
     return success;
+  }
+
+  public String toCsv() {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%d,%s,%s",
+        csvEsc(id),
+        csvEsc(customerId),
+        membershipStatus,
+        csvEsc(name),
+        csvEsc(car),
+        csvEsc(referrer),
+        experience,
+        csvEsc(about),
+        gasCard,
+        csvEsc(email),
+        csvEsc(googleLdap),
+        csvEsc(phone),
+        csvEsc(emergencyName),
+        csvEsc(emergencyPhone),
+        getNumRegistrations(),
+        dateFormat.format(createDate),
+        dateFormat.format(updateDate));
+  }
+
+  private static String csvEsc(String s) {
+    return s == null ? "" : "\"" + s.replaceAll("\"", "'") + "\"";
   }
 
   @Override
