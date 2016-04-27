@@ -20,6 +20,9 @@ public class ManageRegistrationsServlet extends HttpServlet {
 
     pageState.handleSort(request);
 
+    List<Driver> drivers = Driver.findAll(Property.NAME, true, null, false, null);
+    request.setAttribute("drivers", drivers);
+
     List<Event> events = Event.findAll();
     request.setAttribute("events", events);
 

@@ -15,7 +15,16 @@ public class ManageRegistrationServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String id = request.getParameter("id");
-    Registration registration = (id == null || id.length() == 0) ? null : Registration.findById(id);
+    Registration registration;
+    if (id == null || id.length() == 0) {
+      String userId = request.getParameter("userId");
+      String eventId = request.getParameter("eventId");
+      String group = request.getParameter("group");
+      registration = Registration.createNew(userId, eventId, Experience.valueOf(group), false, 0, null);
+      registration.save();
+    } else {
+      registration = Registration.findById(id);
+    }
 
     if (registration == null) {
       // Not found

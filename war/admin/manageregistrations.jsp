@@ -84,6 +84,38 @@
   <div class="dnf-button-bar">
     <button class="dnf-delete-button" id="deleteButton">Delete</button>
   </div>
+  <form action="manageregistration" autocomplete="on" id="newRegistrationForm" method="get">
+    <fieldset class="dnf-button-bar">
+      <label>
+        Driver:
+        <select id="userId" name="userId">
+          <c:forEach items="${requestScope.drivers}" var="driver">
+            <option value="${driver.id}">${driver.name}</option>
+          </c:forEach>
+        </select>
+      </label>
+      <br>
+      <label>
+        Event:
+        <select id="newEventId" name="eventId">
+          <c:forEach items="${requestScope.events}" var="event">
+            <option value="${event.id}"><fmt:formatDate value="${event.date}" pattern="MMMM d, yyyy"/></option>
+          </c:forEach>
+        </select>
+      </label>
+      <br>
+      <label>
+        Group:
+        <select id ="group" name="group">
+          <c:forEach items="${requestScope.optionMap[\"EXPERIENCE\"]}" var="experience">
+            <option value="${experience}">${experience} (${experience.label})</option>
+          </c:forEach>
+        </select>
+      </label>
+      <br>
+      <button>Create New</button>
+    </fieldset>
+  </form>
   <fieldset style="text-align: center">
     <textarea cols="80" rows="10">${fn:escapeXml(mailingList)}</textarea>
   </fieldset>
