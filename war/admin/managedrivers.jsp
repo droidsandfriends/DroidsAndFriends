@@ -82,7 +82,7 @@
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="9">${fn:length(drivers)} drivers</td>
+          <td class="dnf-admin-footer" colspan="10">${fn:length(drivers)} drivers</td>
         </tr>
       </tbody>
     </table>
