@@ -59,6 +59,10 @@ public enum Property {
   RUN_GROUP("runGroup", "Group"),
   WITH_INSTRUCTOR("withInstructor", "With instructor"),
   GUEST_COUNT("guestCount", "Guests"),
+  INVOICE_ID("invoiceId", "Invoice"),
+
+  // Invoice properties
+  INVOICE_STATUS("invoiceStatus", "Invoice status"),
   TRANSACTION_ID("transactionId", "Transaction"),
   
   // Charge properties

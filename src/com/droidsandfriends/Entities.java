@@ -134,4 +134,23 @@ public class Entities {
     entity.setProperty(property.getName(), value.toString());
   }
 
+  public static InvoiceStatus getInvoiceStatus(Entity entity, Property property) {
+    return getInvoiceStatus(entity, property, InvoiceStatus.NEW);
+  }
+
+  public static InvoiceStatus getInvoiceStatus(Entity entity, Property property, InvoiceStatus defaultValue) {
+    InvoiceStatus invoiceStatus;
+    try {
+      String value = getString(entity, property);
+      invoiceStatus = (value == null) ? defaultValue : InvoiceStatus.valueOf(value);
+    } catch (Exception e) {
+      invoiceStatus = defaultValue;
+    }
+    return invoiceStatus;
+  }
+
+  public static void setInvoiceStatus(Entity entity, Property property, InvoiceStatus value) {
+    entity.setProperty(property.getName(), value.toString());
+  }
+
 }
