@@ -32,6 +32,7 @@
       <dnf:textinput property="TRANSACTION_ID" value="" optional="true" readonly="true">
         <a href="managetransaction?id=${registration.transactionId}">${registration.transactionId}</a>
       </dnf:textinput>
+      <dnf:checkboxinput property="IS_WAITLISTED" value="${registration.waitlisted}"/>
     </table>
   </form>
   <div class="dnf-button-bar">

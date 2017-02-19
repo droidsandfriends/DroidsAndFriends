@@ -26,7 +26,7 @@
     <tbody>
       <c:forEach items="${registrations}" var="registration">
         <c:if test="${group == registration.runGroup}">
-          <tr>
+          <tr ${registration.waitlisted ? "class=\"dnf-disabled\"" : ""}>
             <td width="50%">
               <c:if test="${registration.userId == requestScope.userId}"><span style="color:#fd9240;">&#9654;&nbsp;</span></c:if>
               ${fn:escapeXml(registration.name)}
@@ -35,6 +35,7 @@
                 <c:when test="${registration.guestCount == 1}"><span class="dnf-roster-guests">+ 1 guest</span></c:when>
                 <c:when test="${registration.guestCount > 1}"><span class="dnf-roster-guests">+ ${registration.guestCount} guests</span></c:when>
               </c:choose>
+              <c:if test="${registration.waitlisted}"><span class="dnf-roster-guests"> (waitlisted)</span></c:if>
              </td>
             <td width="50%">
               ${fn:escapeXml(registration.car)}

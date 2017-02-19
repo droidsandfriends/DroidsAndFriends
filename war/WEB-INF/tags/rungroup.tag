@@ -13,7 +13,7 @@
     <c:choose>
       <c:when test="${openings > 1}">${openings} available</c:when>
       <c:when test="${openings == 1}">Only 1 left!</c:when>
-      <c:otherwise>FULL</c:otherwise>
+      <c:otherwise>FULL<span class="dnf-roster-guests dnf-waitlisted"> (waitlist available)</span></c:otherwise>
     </c:choose>
   </span>
   <jsp:doBody/>

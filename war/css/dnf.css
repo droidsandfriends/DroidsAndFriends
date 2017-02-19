@@ -158,7 +158,8 @@ legend {
   background-image: linear-gradient(#cc6666,#663333) !important;
 }
 
-.dnf-disabled {
+.dnf-disabled,
+.dnf-waitlisted {
   opacity: .50 !important;
   filter: alpha(opacity=50) !important;
 }

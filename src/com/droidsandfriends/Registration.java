@@ -23,13 +23,14 @@ public class Registration {
   private boolean withInstructor; // Whether the driver is requesting an instructor at extra cost
   private long guestCount;        // Number of guests they paid for
   private String transactionId;   // Datastore entity name of the transaction that paid for this registration
+  private boolean isWaitlisted;   // Whether this is a waitlisted registration
   private Date createDate;        // Entity creation timestamp
   private Date updateDate;        // Entity update timestamp
 
   
   private Registration(String id, String userId, String name, String car, String email, String googleLdap,
                        String eventId, Date date, Experience runGroup, boolean withInstructor, long guestCount,
-                       String transactionId, Date createDate, Date updateDate) {
+                       String transactionId, boolean isWaitlisted, Date createDate, Date updateDate) {
     this.id = id;
     this.userId = userId;
     this.name = name;
@@ -42,6 +43,7 @@ public class Registration {
     this.withInstructor = withInstructor;
     this.guestCount = guestCount;
     this.transactionId = transactionId;
+    this.isWaitlisted = isWaitlisted;
     this.createDate = createDate;
     this.updateDate = updateDate;
   }
@@ -60,6 +62,7 @@ public class Registration {
         Entities.getBoolean(entity, Property.WITH_INSTRUCTOR),
         Entities.getLong(entity, Property.GUEST_COUNT),
         Entities.getString(entity, Property.TRANSACTION_ID),
+        Entities.getBoolean(entity, Property.IS_WAITLISTED),
         Entities.getDate(entity, Property.CREATE_DATE),
         Entities.getDate(entity, Property.UPDATE_DATE));
   }
@@ -124,6 +127,10 @@ public class Registration {
     return transactionId;
   }
 
+  public boolean isWaitlisted() {
+    return isWaitlisted;
+  }
+
   public Date getCreateDate() {
     return createDate;
   }
@@ -133,7 +140,7 @@ public class Registration {
   }
   
   public static Registration createNew(String userId, String eventId, Experience runGroup, boolean withInstructor,
-                                       long guestCount, String transactionId) {
+                                       long guestCount, String transactionId, boolean isWaitlisted) {
     Date now = new Date();
     return new Registration(
         generateRegistrationId(userId, eventId, runGroup),
@@ -148,6 +155,7 @@ public class Registration {
         withInstructor,
         guestCount,
         transactionId,
+        isWaitlisted,
         /* createDate */ now,
         /* updateDate */ now);
   }
@@ -250,6 +258,7 @@ public class Registration {
     this.runGroup = Properties.validateExperience(Property.RUN_GROUP, parameterMap, errors);
     this.withInstructor = Properties.validateBoolean(Property.WITH_INSTRUCTOR, parameterMap, errors);
     this.guestCount = Long.parseLong(parameterMap.get(Property.GUEST_COUNT.getName())[0], 10);
+    this.isWaitlisted = Properties.validateBoolean(Property.IS_WAITLISTED, parameterMap, errors);
     this.updateDate = new Date();
 
     return errors;
@@ -302,6 +311,7 @@ public class Registration {
         Entities.setBoolean(entity, Property.WITH_INSTRUCTOR, this.withInstructor);
         Entities.setLong(entity, Property.GUEST_COUNT, this.guestCount);
         Entities.setString(entity, Property.TRANSACTION_ID, this.transactionId);
+        Entities.setBoolean(entity, Property.IS_WAITLISTED, this.isWaitlisted);
         Entities.setDate(entity, Property.CREATE_DATE, this.createDate);
         Entities.setDate(entity, Property.UPDATE_DATE, this.updateDate);
 
@@ -353,9 +363,10 @@ public class Registration {
   @Override
   public String toString() {
     return String.format("{id: %s, userId: %s, name: %s, car: %s, email: %s, googleLdap: %s, eventId: %s, date: %s, "
-        + "runGroup: %s, withInstructor: %s, guestCount: %d, transactionId: %s, createDate: %s, updateDate: %s}",
+        + "runGroup: %s, withInstructor: %s, guestCount: %d, transactionId: %s, isWaitlisted: %s, createDate: %s, "
+        + "updateDate: %s}",
         id, userId, name, car, email, googleLdap, eventId, date, runGroup, withInstructor, guestCount, transactionId,
-        createDate, updateDate);
+        isWaitlisted, createDate, updateDate);
   }
 
 }

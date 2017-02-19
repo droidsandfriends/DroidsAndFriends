@@ -20,7 +20,7 @@ public class ManageRegistrationServlet extends HttpServlet {
       String userId = request.getParameter("userId");
       String eventId = request.getParameter("eventId");
       String group = request.getParameter("group");
-      registration = Registration.createNew(userId, eventId, Experience.valueOf(group), false, 0, null);
+      registration = Registration.createNew(userId, eventId, Experience.valueOf(group), false, 0, null, false);
       registration.save();
     } else {
       registration = Registration.findById(id);

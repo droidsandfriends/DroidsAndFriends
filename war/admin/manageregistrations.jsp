@@ -45,13 +45,12 @@
           <th title="Registration">Reg</th>
           <dnf:th property="NAME"/>
           <dnf:th property="CAR"/>
-          <!-- dnf:th property="EMAIL"/ -->
-          <!-- dnf:th property="GOOGLE_LDAP"/ -->
           <dnf:th property="DATE"/>
           <dnf:th property="RUN_GROUP" label="Group"/>
           <th title="Coach?">Coach?</th>
           <dnf:th property="GUEST_COUNT"/>
           <th title="Transaction">Txn</th>
+          <th title="Waitlist?">Waitlist?</th>
           <dnf:th property="CREATE_DATE"/>
           <dnf:th property="UPDATE_DATE"/>
         </tr>
@@ -64,19 +63,18 @@
             <td><a href="manageregistration?id=${registration.id}" title="${registration.id}">Edit</a></td>
             <td><a href="managedriver?id=${registration.userId}">${fn:escapeXml(registration.name)}</a></td>
             <td>${fn:escapeXml(registration.car)}</td>
-            <!-- td>${fn:escapeXml(registration.email)}</td -->
-            <!-- td>${fn:escapeXml(registration.googleLdap)}</td -->
             <td><a href="manageevent?id=${registration.eventId}"><fmt:formatDate value="${registration.date}" pattern="MMMM d, yyyy"/></a></td>
             <td class="dnf-group-${registration.runGroup}">${registration.runGroup}</td>
             <td style="text-align:center">${registration.withInstructor ? "Y" : "&nbsp;"}</td>
             <td class="dnf-number">${registration.guestCount > 0 ? registration.guestCount : ""}</td>
             <td><a href="managetransaction?id=${registration.transactionId}" title="${registration.transactionId}">View</a></td>
+            <td style="text-align:center">${registration.waitlisted ? "Y" : "&nbsp;"}</td>
             <td title="${registration.createDate}"><fmt:formatDate value="${registration.createDate}" pattern="M/d/yyyy h:mm a"/></td>
             <td title="${registration.updateDate}"><fmt:formatDate value="${registration.updateDate}" pattern="M/d/yyyy h:mm a"/></td>
           </tr>
         </c:forEach>
         <tr>
-          <td class="dnf-admin-footer" colspan="11">${fn:length(requestScope.registrations)} registrations</td>
+          <td class="dnf-admin-footer" colspan="12">${fn:length(requestScope.registrations)} registrations</td>
         </tr>
       </tbody>
     </table>

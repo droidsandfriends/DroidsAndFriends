@@ -66,6 +66,12 @@ public class EventServlet extends HttpServlet {
       int instructorCount = 0, driverCount = 0, guestCount = 0, flaggerCount = isFiveMile ? 14 : 7;
       int requestedInstructorCount = 0;
       for (Registration registration : registrations) {
+        if (!alreadyRegistered && userId.equals(registration.getUserId())) {
+          alreadyRegistered = true;
+        }
+        if (registration.isWaitlisted()) {
+          continue;
+        }
         if (Experience.X.equals(registration.getRunGroup())) {
           instructorCount++;
         } else {
@@ -75,9 +81,6 @@ public class EventServlet extends HttpServlet {
           }
         }
         guestCount += registration.getGuestCount();
-        if (!alreadyRegistered && userId.equals(registration.getUserId())) {
-          alreadyRegistered = true;
-        }
       }
 
       List<LineItem> expenses = new ArrayList<>();
@@ -139,8 +142,14 @@ public class EventServlet extends HttpServlet {
 
       // Process arguments
       String eventId = request.getParameter("id");
-      // Handle A1 vs. A2 pseudo-run groups.
       String runGroupParameter = request.getParameter("runGroup");
+      // Handle waitlist registrations
+      boolean isWaitlistRegistration = false;
+      if (runGroupParameter != null && runGroupParameter.startsWith("W")) {
+        isWaitlistRegistration = true;
+        runGroupParameter = runGroupParameter.substring(1);
+      }
+      // Handle A1 vs. A2 pseudo-run groups
       boolean isWithInstructor = false;
       if (runGroupParameter != null && runGroupParameter.startsWith("A")) {
         isWithInstructor = "A1".equals(runGroupParameter);
@@ -157,8 +166,8 @@ public class EventServlet extends HttpServlet {
         return;
       }
 
-      // Pure coach registrations are free, so don't create a charge.
-      boolean mustPay = !(Experience.X.equals(runGroup) && guestCount == 0);
+      // Waitlist registrations and pure coach registrations (without guests) are free, so don't create a charge.
+      boolean mustPay = !isWaitlistRegistration && !(Experience.X.equals(runGroup) && guestCount == 0);
       Charge charge = null;
       if (mustPay) {
         Event event = Event.findById(eventId);
@@ -232,7 +241,7 @@ public class EventServlet extends HttpServlet {
       // ... and that is the life of a dollar! :)
 
       // 1. Decrement the availability count for the given event
-      if (Event.updateRunGroup(eventId, runGroup)) {
+      if (isWaitlistRegistration || Event.updateRunGroup(eventId, runGroup)) {
         // 2. Record the charge in the datastore (unless coach registration)
         Transaction transaction = null;
         if (mustPay) {
@@ -242,7 +251,7 @@ public class EventServlet extends HttpServlet {
           // 3. Record the registration in the datastore
           Registration registration =
               Registration.createNew(userId, eventId, runGroup, isWithInstructor, guestCount,
-                  (mustPay ? transaction.getId() : ""));
+                  (mustPay ? transaction.getId() : ""), isWaitlistRegistration);
           if (registration.save()) {
             // 4. Capture payment
             if (mustPay) {
@@ -263,7 +272,7 @@ public class EventServlet extends HttpServlet {
         }
       } else {
         LOG.severe("EventServlet::doPut failed to update run group inventory, not charging card");
-        charge.refund();
+        if (charge != null) charge.refund();
         request.setAttribute("error", "Sorry, the run group you selected may be full, or an error occurred. Your "
             + "credit card has not been charged. Please try again.");
       }

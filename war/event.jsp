@@ -17,9 +17,8 @@
   <div class="dnf-message">${event.description}</div>
   <fieldset>
     <c:choose>
-      <c:when test="${requestScope.alreadyRegistered}">You are registered for this event.</c:when>
-      <c:when test="${event.soldOut}">Sorry, this event is sold out.</c:when>
       <c:when test="${event.hidden && !requestScope.isAdmin}">Registration for this event is closed.</c:when>
+      <c:when test="${requestScope.alreadyRegistered}">You are registered for this event.</c:when>
       <c:otherwise>
         <form action="order" autocomplete="on" id="orderForm" method="post">
           <table>
@@ -31,21 +30,46 @@
                 </td>
                 <td class="dnf-field">
                   <select id="runGroup" name="runGroup" size="1" required>
-                    <c:if test="${event.a > 0 && requestScope.canRequestMoreInstructors}">
-                      <option value="A1"}>Beginner (with instructor) - <fmt:formatNumber value="${event.driverPrice + event.instructorPrice}" type="currency"/></option>
-                    </c:if>
-                    <c:if test="${event.a > 0}">
-                      <option value="A2">Beginner (no instructor) - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
-                    </c:if>
-                    <c:if test="${event.b > 0}">
-                      <option value="B" ${driver.experience == "B" ? "selected" : ""}>Intermediate - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
-                    </c:if>
-                    <c:if test="${event.c > 0}">
-                      <option value="C" ${driver.experience == "C" ? "selected" : ""}>Advanced - <fmt:formatNumber value="${event.driverPrice}" type="currency"/></option>
-                    </c:if>
-                    <c:if test="${event.x > 0 && (driver.experience == \"C\" || driver.experience == \"X\")}">
-                      <option value="X" ${driver.experience == "X" ? "selected" : ""}>Instructor</option>
-                    </c:if>
+                    <c:choose>
+                      <c:when test="${event.a > 0 && requestScope.canRequestMoreInstructors}">
+                        <option value="A1"}>Beginner + coach (<fmt:formatNumber value="${event.driverPrice + event.instructorPrice}" type="currency"/>)</option>
+                      </c:when>
+                      <c:otherwise>
+                        <option value="WA1"}>Beginner + coach (add to waitlist)</option>
+                      </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                      <c:when test="${event.a > 0}">
+                        <option value="A2">Beginner (<fmt:formatNumber value="${event.driverPrice}" type="currency"/>)</option>
+                      </c:when>
+                      <c:otherwise>
+                        <option value="WA2">Beginner (add to waitlist)</option>
+                      </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                      <c:when test="${event.b > 0}">
+                        <option value="B" ${driver.experience == "B" ? "selected" : ""}>Intermediate (<fmt:formatNumber value="${event.driverPrice}" type="currency"/>)</option>
+                      </c:when>
+                      <c:otherwise>
+                        <option value="WB" ${driver.experience == "B" ? "selected" : ""}>Intermediate (add to waitlist)</option>
+                      </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                      <c:when test="${event.c > 0}">
+                        <option value="C" ${driver.experience == "C" ? "selected" : ""}>Advanced (<fmt:formatNumber value="${event.driverPrice}" type="currency"/>)</option>
+                      </c:when>
+                      <c:otherwise>
+                        <option value="WC" ${driver.experience == "C" ? "selected" : ""}>Advanced (add to waitlist)</option>
+                      </c:otherwise>
+                    </c:choose>
+                    <c:choose>
+                      <c:when test="${event.x > 0 && driver.experience == \"X\"}">
+                        <option value="X" ${driver.experience == "X" ? "selected" : ""}>Instructor</option>
+                      </c:when>
+                      <c:when test="${driver.experience == \"X\"}">
+                        <option value="WX" ${driver.experience == "X" ? "selected" : ""}>Instructor (add to waitlist)</option>
+                      </c:when>
+                    </c:choose>
                   </select>
                   <img class="dnf-group-logo" id="runGroupLogo" src="/images/logo_full.png">
                 </td>
@@ -185,11 +209,16 @@
 
   var ITEMS = {
     'A1': {label: 'Beginner (with instructor)', hint: 'New to track driving, needs instruction', price: ${event.driverPrice + event.instructorPrice}, img: 'logo_A.png'},
+    'WA1': {label: 'Beginner (with instructor) - WAITLIST', hint: 'New to track driving, needs instruction', price: 0, img: 'logo_A.png'},
     'A2': {label: 'Beginner (no instructor)', hint: '2-10 track days, comfortable driving solo', price: ${event.driverPrice}, img: 'logo_A.png'},
+    'WA2': {label: 'Beginner (no instructor) - WAITLIST', hint: '2-10 track days, comfortable driving solo', price: 0, img: 'logo_A.png'},
     'B': {label: 'Intermediate', hint: '10-20 track days', price: ${event.driverPrice}, img: 'logo_B.png'},
+    'WB': {label: 'Intermediate - WAITLIST', hint: '10-20 track days', price: 0, img: 'logo_B.png'},
     'C': {label: 'Advanced', hint: '20+ track days, comfortable with open passing', price: ${event.driverPrice}, img: 'logo_C.png'},
-    'G': {label: 'Guest', hint: 'Guest only, not driving on track', price: ${event.guestPrice}},
-    'X': {label: 'Instructor', hint: 'Experienced HPDE instructor', price: 0, img: 'logo_X.png'}
+    'WC': {label: 'Advanced - WAITLIST', hint: '20+ track days, comfortable with open passing', price: 0, img: 'logo_C.png'},
+    'X': {label: 'Instructor', hint: 'Experienced HPDE instructor', price: 0, img: 'logo_X.png'},
+    'WX': {label: 'Instructor - WAITLIST', hint: 'Experienced HPDE instructor', price: 0, img: 'logo_X.png'},
+    'G': {label: 'Guest', hint: 'Guest only, not driving on track', price: ${event.guestPrice}}
   };
 
   var ORDER = {};
@@ -206,7 +235,8 @@
     var guest = ITEMS['G'];
 
     ORDER.runGroup = runGroup;
-    ORDER.amount = item.price + (guestCount * guest.price);
+    ORDER.waitlisted = runGroup.charAt(0) == 'W';
+    ORDER.amount = ORDER.waitlisted ? 0 : (item.price + (guestCount * guest.price));
     ORDER.description = EVENT_DATE + ': ' + item.label + ' - $' + item.price;
     if (guestCount > 0) {
       ORDER.description += ', ' + guestCount + ' ' + guest.label +
@@ -235,7 +265,7 @@
     });
  
   $addHandler($('payButton'), 'click', function(e) {
-    if (ORDER.runGroup == 'A2' && !window.confirm(
+    if ((ORDER.runGroup == 'A2' || ORDER.runGroup == 'WA2') && !window.confirm(
             'Please confirm that you have sufficient experience\n' +
             'to drive solo, and don\'t need an instructor to ride\n' +
             'with you. Contact the organizers with questions.')) {
