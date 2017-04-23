@@ -21,7 +21,7 @@ public class ManageTransactionServlet extends HttpServlet {
       return;
     }
 
-    // Render form
+    // Render form (updating comment to test GitHub integration)
     request.setAttribute("transaction", transaction);
     request.getRequestDispatcher("managetransaction.jsp").forward(request, response);
     return;
