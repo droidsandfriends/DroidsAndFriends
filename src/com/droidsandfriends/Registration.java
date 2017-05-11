@@ -186,11 +186,11 @@ public class Registration {
   
   public static List<Registration> findAll() {
     return findAll(Property.CREATE_DATE, /* isAscending */ true, /* eventId */ null, /* group */ null,
-        /* onlyGooglers */ false);
+        /* onlyConfirmed */ false, /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAllByEventId(String eventId) {
-    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null, /* onlyGooglers */ false);
+    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null, /* onlyConfirmed */ false, /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAllByUserId(String userId) {
@@ -206,11 +206,11 @@ public class Registration {
   }
 
   public static List<Registration> findAll(Property orderBy, boolean isAscending) {
-    return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null, /* onlyGooglers */ false);
+    return findAll(orderBy, isAscending, /* eventId */ null, /* group */ null, /* onlyConfirmed*/ false, /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAll(Property orderBy, boolean isAscending, String eventId, Experience group,
-                                           boolean onlyGooglers) {
+                                           boolean onlyConfirmed, boolean onlyGooglers) {
     DatastoreService db = DatastoreServiceFactory.getDatastoreService();
     Key parentKey = KeyFactory.createKey("Registrations", "default");
 
@@ -224,7 +224,8 @@ public class Registration {
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
       // In-memory filtering, because DataStore indexes are a pain
-      if ((!onlyGooglers || registration.isGoogler())
+      if ((!onlyConfirmed || !registration.isWaitlisted())
+          && (!onlyGooglers || registration.isGoogler())
           && (group == null || group.equals(registration.getRunGroup()))
           && (eventId == null || eventId.equals("") || eventId.equals(registration.getEventId()))) {
         registrations.add(registration);

@@ -13,6 +13,7 @@ public class PageState implements Serializable {
   // Filter parameters
   private String eventId;
   private String experience;
+  private boolean onlyConfirmed;
   private boolean onlyGooglers;
   private String membershipStatus;
   private boolean onlyMatching;
@@ -62,6 +63,7 @@ public class PageState implements Serializable {
       }
     }
 
+    onlyConfirmed = "on".equals(request.getParameter("onlyConfirmed"));
     onlyGooglers = "on".equals(request.getParameter("onlyGooglers"));
 
     String status = request.getParameter(Property.MEMBERSHIP_STATUS.getName());
@@ -91,6 +93,10 @@ public class PageState implements Serializable {
 
   public Experience getExperience() {
     return experience == null ? null : Experience.valueOf(experience);
+  }
+
+  public boolean isOnlyConfirmed() {
+    return onlyConfirmed;
   }
 
   public boolean isOnlyGooglers() {

@@ -34,7 +34,12 @@
       </label>
       &nbsp;
       <label>
-        Only Googlers
+        Confirmed
+        <input type="checkbox" id="onlyConfirmed" name="onlyConfirmed"<c:if test="${requestScope.pageState.onlyConfirmed}"> checked</c:if>>
+      </label>
+      &nbsp;
+      <label>
+        Googlers
         <input type="checkbox" id="onlyGooglers" name="onlyGooglers"<c:if test="${requestScope.pageState.onlyGooglers}"> checked</c:if>>
       </label>
     </fieldset>
@@ -132,6 +137,11 @@
     });
 
     $addHandler($('experience'), 'change', function () {
+      $('action').value = 'filter';
+      $('theForm').submit();
+    });
+
+    $addHandler($('onlyConfirmed'), 'change', function () {
       $('action').value = 'filter';
       $('theForm').submit();
     });

@@ -28,7 +28,7 @@ public class ManageRegistrationsServlet extends HttpServlet {
 
     List<Registration> registrations = Registration.findAll(
         pageState.getOrderBy(), pageState.isAscending(), pageState.getEventId(),
-        pageState.getExperience(), pageState.isOnlyGooglers());
+        pageState.getExperience(), pageState.isOnlyConfirmed(), pageState.isOnlyGooglers());
     request.setAttribute("registrations", registrations);
 
     StringBuilder mailingList = new StringBuilder();
