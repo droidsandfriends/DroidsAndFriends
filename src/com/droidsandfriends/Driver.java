@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 public class Driver {
   
   private static final Logger LOG = Logger.getLogger(Driver.class.getName());
+  private static final Date REFERENCE_DATE = new Date(2018 - 1900, 1, 1); // 2018-02-01
+
 
   private String id; // Datastore entity name; equals owning user's userId
   private String customerId;  // Stripe customer ID
@@ -146,6 +148,14 @@ public class Driver {
     return emergencyPhone;
   }
 
+  /**
+   * @return Whether the driver's profile was updated this year (hence assumed current)
+   */
+  public boolean isUpToDateProfile() {
+    // Assume all new profiles and all those updated after the reference date of February 1, 2018 are up-to-date.
+    return updateDate == null || updateDate.after(REFERENCE_DATE);
+  }
+
   public List<Registration> getRegistrations() {
     return Registration.getRegistrationMap().get(id);
   }
@@ -162,7 +172,7 @@ public class Driver {
   public Date getUpdateDate() {
     return updateDate;
   }
-  
+
   /**
    * Returns the Driver object owned by the given Google user ID.
    * 
@@ -385,8 +395,9 @@ public class Driver {
   public String toString() {
     return String.format("{id: %s, customerId: %s, membershipStatus: %s, name: %s, car: %s, referrer: %s, "
         + "experience: %s, about: %s, gasCard: %s, email: %s, googleLdap: %s, emergencyName: %s, "
-        + "emergencyPhone: %s, createDate: %s, updateDate: %s}", id, customerId, membershipStatus, name, car, referrer,
-        experience, about, gasCard, email, googleLdap, emergencyName, emergencyPhone, createDate, updateDate);
+        + "emergencyPhone: %s, createDate: %s, updateDate: %s, isUpToDateProfile: %s}", id, customerId,
+            membershipStatus, name, car, referrer, experience, about, gasCard, email, googleLdap,
+            emergencyName, emergencyPhone, createDate, updateDate, isUpToDateProfile());
   }
 
 }

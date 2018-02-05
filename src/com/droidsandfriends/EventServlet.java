@@ -36,11 +36,10 @@ public class EventServlet extends HttpServlet {
 
     // If the driver doesn't have a profile, force them to create one first
     Driver driver = Driver.findById((String) request.getAttribute("userId"));
-    if (driver == null) {
+    request.setAttribute("driver", driver);
+    if (driver == null || !driver.isUpToDateProfile()) {
       response.sendRedirect("driver?continueUrl=" + encodedContinueUrl);
       return;
-    } else {
-      request.setAttribute("driver", driver);
     }
     
     // If the driver has a profile, but the membership status is still NEW, force them to pay up first
