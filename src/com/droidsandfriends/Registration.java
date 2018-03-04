@@ -190,7 +190,7 @@ public class Registration {
   }
 
   public static List<Registration> findAllByEventId(String eventId) {
-    return findAll(Property.CREATE_DATE, /* isAscending */ true, eventId, /* group */ null, /* onlyConfirmed */ false, /* onlyGooglers */ false);
+    return findAll(Property.CREATE_DATE, /* isAscending */ false, eventId, /* group */ null, /* onlyConfirmed */ false, /* onlyGooglers */ false);
   }
 
   public static List<Registration> findAllByUserId(String userId) {
@@ -219,7 +219,7 @@ public class Registration {
         : Query.SortDirection.DESCENDING);
 
     // TODO: Should really use a datastore index for server-side filtering
-    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(1500));
+    List<Entity> entities = db.prepare(query).asList(FetchOptions.Builder.withLimit(500));
     List<Registration> registrations = new ArrayList<>(entities.size());
     for (Entity entity : entities) {
       Registration registration = new Registration(entity);
